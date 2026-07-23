@@ -466,3 +466,129 @@ body::before {
   .project-gallery figure:last-child { grid-column: auto; }
   .project-gallery img { height: 260px; }
 }
+
+/* Compact editorial refinement — based on the supplied black-paper / rust / blue references. */
+.site-nav,
+.section-marker,
+.kicker,
+.section-heading h2,
+.profile-intro h2,
+.hero-copy h2,
+.lichico-case-copy h3,
+.film-index-title,
+.screen-content strong,
+.poster-focus b,
+.project-drawer h2,
+.method-row h3,
+.contact h2 {
+  font-family: "Courier New", Courier, monospace;
+}
+
+.hero-ambient > video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .28;
+  filter: saturate(.55) contrast(1.08) brightness(.6);
+  mix-blend-mode: screen;
+}
+
+.hero-ambient::before { z-index: 1; opacity: .72; }
+.hero-ambient::after,
+.hero-ambient > span,
+.ambient-orbit,
+.ambient-gate { z-index: 2; }
+.hero-copy h1 { font-size: clamp(78px, 12vw, 190px); }
+.hero-copy h2 { font-size: 12px; line-height: 1.45; letter-spacing: .15em; }
+
+.section { padding-top: clamp(82px, 9vw, 138px); padding-bottom: clamp(90px, 10vw, 155px); }
+.section-heading,
+.profile-intro { margin-bottom: clamp(42px, 5vw, 72px); }
+.section-heading h2,
+.profile-intro h2,
+.lichico-case-copy h3,
+.screen-content strong,
+.poster-focus b,
+.project-drawer h2,
+.contact h2 {
+  max-width: 920px;
+  margin-top: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.kicker { margin-bottom: 10px; font-size: 11px; line-height: 1.4; }
+
+.profile-layout { grid-template-columns: minmax(180px, 310px) minmax(360px, 720px); justify-content: center; }
+.portrait-slot { min-height: 0; padding: 0; aspect-ratio: 4 / 5; overflow: hidden; background: #8c877d; }
+.portrait-slot img { width: 100%; height: 100%; object-fit: cover; object-position: center 38%; filter: saturate(.82) contrast(1.03); transition: transform .8s cubic-bezier(.2,.8,.2,1), filter .4s; }
+.portrait-slot:hover img { transform: scale(1.025); filter: saturate(1) contrast(1.03); }
+.bio > p,
+.bio > p + p { max-width: 670px; margin-bottom: 20px; font: 13px/1.75 "Courier New", Courier, monospace; }
+.bio dl { margin: 34px 0 28px; }
+.bio dd,
+.bio dt { font: 11px/1.5 "Courier New", Courier, monospace; }
+
+.lichico-case-copy > p { font: 13px/1.7 "Courier New", Courier, monospace; }
+.lichico-case-copy .account-note { font-family: "Courier New", Courier, monospace; }
+.tiktok-selector button { grid-template-columns: 24px 1fr; align-content: center; }
+.tiktok-selector span { font: 12px/1 "Courier New", Courier, monospace; }
+.tiktok-selector b { font: 7px/1.25 "Courier New", Courier, monospace; }
+.tiktok-selector em { grid-column: 2; color: #a39c90; font: normal 7px/1.3 "Courier New", Courier, monospace; }
+.lichico-metrics strong { font: 14px/1.2 "Courier New", Courier, monospace; letter-spacing: .05em; }
+.netease-reserve p { font: 12px/1.55 "Courier New", Courier, monospace; }
+
+.project-index { justify-content: center; }
+.project-index-label { display: block; padding: 12px 0 8px; border-bottom: 1px solid var(--line); color: #777168; font: 9px/1.2 "Courier New", Courier, monospace; letter-spacing: .16em; text-transform: uppercase; }
+.project-index--right .project-index-label { text-align: right; }
+.project-index-label--documentary { margin-top: 12px; color: #a26552; }
+.film-index-title { font-size: 12px; line-height: 1.25; letter-spacing: .02em; }
+.film-index-card { min-height: 86px; }
+.screen-content { padding: 42px; }
+.screen-content strong { margin-top: 8px; }
+.screen-content i { margin-top: 24px; }
+
+.stage-rail button { font: 12px/1.35 "Courier New", Courier, monospace; }
+.poster-focus b { margin-bottom: 4px; }
+
+.project-drawer header { padding-bottom: 28px; }
+.project-drawer h2 { margin: 12px 0 8px; }
+.drawer-media video,
+.drawer-media iframe { width: 100%; min-height: 480px; aspect-ratio: 16 / 9; border: 0; background: #050505; object-fit: contain; }
+.media-preview > strong { font: 13px/1.4 "Courier New", Courier, monospace; letter-spacing: .06em; text-transform: uppercase; }
+.drawer-grid section { min-height: 0; }
+.drawer-grid section p { font: 13px/1.72 "Courier New", Courier, monospace; white-space: pre-line; }
+.gallery-placeholder p { font: 12px/1.6 "Courier New", Courier, monospace; }
+
+.method-row { grid-template-columns: minmax(210px, .75fr) minmax(320px, 1.6fr); }
+.method-row h3 { font-size: 13px; line-height: 1.35; letter-spacing: .06em; text-transform: uppercase; }
+.method-row p { font-family: "Courier New", Courier, monospace; }
+
+.contact { min-height: 72svh; }
+.contact h2 { margin: 18px 0 34px; font-size: 14px; line-height: 1.55; letter-spacing: .08em; }
+.contact > a { font: 13px/1.4 "Courier New", Courier, monospace; }
+
+@media (max-width: 900px) {
+  .profile-layout { grid-template-columns: minmax(180px, 280px) 1fr; }
+  .projector { grid-template-columns: 1fr; }
+  .project-index { display: grid; grid-template-columns: repeat(2, 1fr); }
+  .project-index-label { grid-column: 1 / -1; }
+  .project-index--right .project-index-label { text-align: left; }
+  .projector-screen { order: -1; }
+  .projector-hint { grid-column: 1; }
+}
+
+@media (max-width: 680px) {
+  .hero-ambient > video { opacity: .2; }
+  .hero-copy h1 { font-size: clamp(68px, 25vw, 118px); }
+  .profile-layout { grid-template-columns: 1fr; }
+  .portrait-slot { width: min(78vw, 300px); }
+  .method-row { grid-template-columns: 1fr; }
+  .method-row p { grid-column: 1; }
+  .drawer-media video { min-height: 260px; }
+  .tiktok-selector em { display: none; }
+}

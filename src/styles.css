@@ -634,8 +634,18 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .archive-page button,
 .archive-page a { color: inherit; }
 .archive-page button { font: inherit; }
-.archive-reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s ease, transform .9s cubic-bezier(.2,.7,.15,1); }
-.archive-reveal.is-visible { opacity: 1; transform: translateY(0); }
+.archive-reveal { opacity: 1; transform: none; }
+.archive-reveal.is-visible { opacity: 1; transform: none; }
+.archive-nav,
+.archive-hero > video,
+.archive-hero-credit,
+.film-object,
+.theatre-poster,
+.skill-node,
+.archive-drawer,
+.drawer-hero-image,
+.drawer-player,
+.gallery-lightbox figure { will-change: transform, opacity; }
 
 .archive-nav {
   position: fixed;

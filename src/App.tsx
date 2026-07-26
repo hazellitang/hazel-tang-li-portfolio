@@ -1,4 +1,7 @@
-import { CSSProperties, useEffect, useRef, useState } from 'react'
+import { CSSProperties, RefObject, useEffect, useRef, useState } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useGSAP } from '@gsap/react'
 import {
   abilities,
   aboutMe,
@@ -11,6 +14,8 @@ import {
   Project,
   theatre,
 } from './data'
+
+gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 const labels: Record<string, Localized> = {
   about: { en: 'About me', zh: '关于我', tc: '關於我' },
@@ -31,16 +36,181 @@ const labels: Record<string, Localized> = {
 
 const t = (lang: Lang, en: string, zh: string, tc = zh) => ({ en, zh, tc })[lang]
 
-function useReveal() {
-  useEffect(() => {
-    const nodes = [...document.querySelectorAll('.archive-reveal')]
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add('is-visible')),
-      { threshold: 0.08 },
+function usePortfolioMotion(scope: RefObject<HTMLElement | null>) {
+  useGSAP(() => {
+    const root = scope.current
+    if (!root) return
+
+    const mm = gsap.matchMedia()
+    mm.add(
+      {
+        desktop: '(min-width: 761px)',
+        mobile: '(max-width: 760px)',
+        reduceMotion: '(prefers-reduced-motion: reduce)',
+      },
+      (context) => {
+        const { desktop, reduceMotion } = context.conditions as { desktop: boolean; mobile: boolean; reduceMotion: boolean }
+
+        if (reduceMotion) {
+          gsap.set(
+            [
+              '.archive-hero-topline',
+              '.archive-hero-credit > *',
+              '.archive-hero-note',
+              '.archive-enter',
+              '.archive-hero-contact',
+              '.archive-reveal',
+              '.archive-section-label',
+              '.film-object',
+              '.theatre-poster',
+              '.skill-node',
+            ],
+            { clearProps: 'all' },
+          )
+          return
+        }
+
+        const heroTimeline = gsap.timeline({ defaults: { ease: 'power3.out' } })
+        heroTimeline
+          .fromTo('.archive-hero > video', { scale: 1.1, autoAlpha: 0 }, { scale: 1.02, autoAlpha: 0.52, duration: 1.8 }, 0)
+          .fromTo('.archive-hero-wash', { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.1 }, 0)
+          .fromTo('.archive-hero-topline', { y: -18, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.8 }, 0.22)
+          .fromTo(
+            '.archive-hero-credit > *',
+            { y: 42, autoAlpha: 0 },
+            { y: 0, autoAlpha: 1, duration: 1, stagger: 0.1 },
+            0.34,
+          )
+          .fromTo('.archive-hero-note', { x: 28, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.8 }, 0.7)
+          .fromTo(
+            ['.archive-enter', '.archive-hero-contact'],
+            { y: 16, autoAlpha: 0 },
+            { y: 0, autoAlpha: 1, duration: 0.7, stagger: 0.08 },
+            0.78,
+          )
+
+        gsap.to('.archive-hero > video', {
+          yPercent: desktop ? 9 : 4,
+          scale: desktop ? 1.08 : 1.04,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '.archive-hero',
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 0.8,
+          },
+        })
+
+        gsap.utils.toArray<HTMLElement>('.archive-reveal').forEach((element) => {
+          gsap.fromTo(
+            element,
+            { y: desktop ? 54 : 30, autoAlpha: 0 },
+            {
+              y: 0,
+              autoAlpha: 1,
+              duration: desktop ? 1 : 0.72,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: element,
+                start: 'top 86%',
+                toggleActions: 'play none none none',
+                once: true,
+              },
+            },
+          )
+        })
+
+        gsap.utils.toArray<HTMLElement>('.archive-section-label').forEach((label) => {
+          gsap.fromTo(
+            label,
+            { x: -22, autoAlpha: 0 },
+            {
+              x: 0,
+              autoAlpha: 1,
+              duration: 0.65,
+              ease: 'power2.out',
+              scrollTrigger: { trigger: label.parentElement, start: 'top 82%', once: true },
+            },
+          )
+        })
+
+        ScrollTrigger.batch('.film-object', {
+          start: 'top 88%',
+          once: true,
+          interval: 0.08,
+          batchMax: desktop ? 3 : 1,
+          onEnter: (batch) => gsap.fromTo(
+            batch,
+            { y: desktop ? 48 : 28, autoAlpha: 0 },
+            { y: 0, autoAlpha: 1, duration: 0.75, ease: 'power3.out', stagger: 0.09, overwrite: 'auto' },
+          ),
+        })
+
+        ScrollTrigger.batch('.theatre-poster', {
+          start: 'top 90%',
+          once: true,
+          batchMax: desktop ? 4 : 2,
+          onEnter: (batch) => gsap.fromTo(
+            batch,
+            { y: 70, rotation: (index) => index % 2 === 0 ? -2.2 : 2.2, autoAlpha: 0 },
+            { y: 0, rotation: 0, autoAlpha: 1, duration: 0.9, stagger: 0.12, ease: 'power3.out', overwrite: 'auto' },
+          ),
+        })
+
+        ScrollTrigger.batch('.skill-node', {
+          start: 'top 92%',
+          once: true,
+          batchMax: desktop ? 7 : 2,
+          onEnter: (batch) => gsap.fromTo(
+            batch,
+            { scale: 0.94, y: 24, autoAlpha: 0 },
+            { scale: 1, y: 0, autoAlpha: 1, duration: 0.62, stagger: 0.07, ease: 'power2.out', overwrite: 'auto' },
+          ),
+        })
+
+        if (desktop) {
+          const hero = root.querySelector<HTMLElement>('.archive-hero')
+          const heroCredit = root.querySelector<HTMLElement>('.archive-hero-credit')
+          if (hero && heroCredit) {
+            const xTo = gsap.quickTo(heroCredit, 'x', { duration: 0.75, ease: 'power3.out' })
+            const yTo = gsap.quickTo(heroCredit, 'y', { duration: 0.75, ease: 'power3.out' })
+            const onPointerMove = (event: PointerEvent) => {
+              const bounds = hero.getBoundingClientRect()
+              xTo(((event.clientX - bounds.left) / bounds.width - 0.5) * 18)
+              yTo(((event.clientY - bounds.top) / bounds.height - 0.5) * 12)
+            }
+            const onPointerLeave = () => { xTo(0); yTo(0) }
+            hero.addEventListener('pointermove', onPointerMove)
+            hero.addEventListener('pointerleave', onPointerLeave)
+
+            const nav = root.querySelector<HTMLElement>('.archive-nav')
+            if (nav) {
+              const navY = gsap.quickTo(nav, 'yPercent', { duration: 0.38, ease: 'power2.out' })
+              ScrollTrigger.create({
+                start: 120,
+                end: 'max',
+                onUpdate: (self) => navY(self.direction === 1 ? -105 : 0),
+                onLeaveBack: () => navY(0),
+              })
+            }
+
+            return () => {
+              hero.removeEventListener('pointermove', onPointerMove)
+              hero.removeEventListener('pointerleave', onPointerLeave)
+            }
+          }
+        }
+      },
+      root,
     )
-    nodes.forEach((node) => observer.observe(node))
-    return () => observer.disconnect()
-  }, [])
+
+    const refresh = () => ScrollTrigger.refresh()
+    window.addEventListener('load', refresh, { once: true })
+    return () => {
+      window.removeEventListener('load', refresh)
+      mm.revert()
+    }
+  }, { scope })
 }
 
 function ReturnIcon({
@@ -176,6 +346,7 @@ function AboutArchive({ lang }: { lang: Lang }) {
 }
 
 function LichicoOutcome({ lang, onOpen }: { lang: Lang; onOpen: (project: Project) => void }) {
+  const playerRef = useRef<HTMLDivElement>(null)
   const [activeIndex, setActiveIndex] = useState(0)
   const [showPoster, setShowPoster] = useState(true)
   const project = commercials[0]
@@ -186,6 +357,15 @@ function LichicoOutcome({ lang, onOpen }: { lang: Lang; onOpen: (project: Projec
     const timer = window.setTimeout(() => setShowPoster(false), 900)
     return () => window.clearTimeout(timer)
   }, [activeIndex])
+
+  useGSAP(() => {
+    if (!showPoster || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    gsap.fromTo(
+      '.outcome-poster',
+      { scale: 1.035, autoAlpha: 0 },
+      { scale: 1, autoAlpha: 1, duration: 0.6, ease: 'power2.out', overwrite: 'auto' },
+    )
+  }, { scope: playerRef, dependencies: [activeIndex, showPoster], revertOnUpdate: true })
 
   return (
     <section className="archive-section outcome-archive" id="outcome">
@@ -215,7 +395,7 @@ function LichicoOutcome({ lang, onOpen }: { lang: Lang; onOpen: (project: Projec
           </div>
         </div>
 
-        <div className="outcome-player">
+        <div className="outcome-player" ref={playerRef}>
           <div className="outcome-player-frame">
             <iframe
               key={active.id}
@@ -384,12 +564,32 @@ function GalleryLightbox({
   lang: Lang
   setIndex: (index: number | null) => void
 }) {
+  const lightboxRef = useRef<HTMLDivElement>(null)
   const gallery = project.gallery ?? []
   const item = gallery[index]
   const move = (direction: number) => setIndex((index + direction + gallery.length) % gallery.length)
 
+  useGSAP(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const timeline = gsap.timeline({ defaults: { ease: 'power3.out' } })
+    timeline
+      .fromTo(lightboxRef.current, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.32 })
+      .fromTo(
+        '.gallery-lightbox figure',
+        { scale: 0.965, y: 18, autoAlpha: 0 },
+        { scale: 1, y: 0, autoAlpha: 1, duration: 0.58 },
+        0.05,
+      )
+      .fromTo(
+        ['.gallery-arrow', '.gallery-lightbox .return-icon'],
+        { autoAlpha: 0 },
+        { autoAlpha: 1, duration: 0.3, stagger: 0.05 },
+        0.18,
+      )
+  }, { scope: lightboxRef })
+
   return (
-    <div className="gallery-lightbox" role="dialog" aria-modal="true" aria-label={item.alt[lang]}>
+    <div className="gallery-lightbox" ref={lightboxRef} role="dialog" aria-modal="true" aria-label={item.alt[lang]}>
       <ReturnIcon label={labels.close[lang]} onClick={() => setIndex(null)} />
       <button className="gallery-arrow gallery-arrow--left" onClick={() => move(-1)} aria-label="Previous image">←</button>
       <figure>
@@ -402,6 +602,7 @@ function GalleryLightbox({
 }
 
 function ProjectDrawer({ project, lang, onClose }: { project: Project; lang: Lang; onClose: () => void }) {
+  const drawerRef = useRef<HTMLElement>(null)
   const [playing, setPlaying] = useState(false)
   const [lightbox, setLightbox] = useState<number | null>(null)
   const [mediaState, setMediaState] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle')
@@ -437,6 +638,41 @@ function ProjectDrawer({ project, lang, onClose }: { project: Project; lang: Lan
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [lightbox, onClose, playing, project.gallery?.length])
 
+  useGSAP(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const timeline = gsap.timeline({ defaults: { ease: 'power3.out' } })
+    timeline
+      .fromTo(drawerRef.current, { xPercent: 5, autoAlpha: 0 }, { xPercent: 0, autoAlpha: 1, duration: 0.58 })
+      .fromTo('.drawer-hero-image', { scale: 1.08 }, { scale: 1, duration: 1.25 }, 0)
+      .fromTo(
+        '.drawer-hero > div:last-child > *',
+        { y: 34, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.72, stagger: 0.08 },
+        0.16,
+      )
+      .fromTo(
+        '.drawer-metadata span',
+        { y: 14, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.45, stagger: 0.06 },
+        0.38,
+      )
+      .fromTo('.drawer-return', { scale: 0.8, rotation: -18, autoAlpha: 0 }, { scale: 1, rotation: 0, autoAlpha: 1, duration: 0.5 }, 0.28)
+  }, { scope: drawerRef })
+
+  useGSAP(() => {
+    if (!playing || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    gsap.fromTo(
+      '.drawer-player',
+      { scale: 0.965, autoAlpha: 0.6 },
+      { scale: 1, autoAlpha: 1, duration: 0.72, ease: 'power3.out', overwrite: 'auto' },
+    )
+    gsap.fromTo(
+      '.player-return',
+      { scale: 0.75, rotation: -16, autoAlpha: 0 },
+      { scale: 1, rotation: 0, autoAlpha: 1, duration: 0.45, ease: 'back.out(1.6)' },
+    )
+  }, { scope: drawerRef, dependencies: [playing], revertOnUpdate: true })
+
   const playUrl = project.embedUrl
     ? `${project.embedUrl}${project.embedUrl.includes('?') ? '&' : '?'}autoplay=1`
     : null
@@ -456,7 +692,7 @@ function ProjectDrawer({ project, lang, onClose }: { project: Project; lang: Lan
 
   return (
     <div className="archive-drawer-backdrop" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
-      <article className={`archive-drawer archive-drawer--${project.kind}`} role="dialog" aria-modal="true" aria-label={project.title[lang]}>
+      <article ref={drawerRef} className={`archive-drawer archive-drawer--${project.kind}`} role="dialog" aria-modal="true" aria-label={project.title[lang]}>
         <ReturnIcon label={`${labels.close[lang]}: ${project.title[lang]}`} onClick={onClose} className="drawer-return" />
         <header className="drawer-hero" style={{ '--project-accent': project.accent } as CSSProperties}>
           <div className="drawer-hero-image" style={project.image ? { backgroundImage: `url(${project.image})` } : undefined} />
@@ -599,15 +835,16 @@ function ArchiveFooter({ lang }: { lang: Lang }) {
 }
 
 function App() {
+  const pageRef = useRef<HTMLElement>(null)
   const [lang, setLang] = useState<Lang>('en')
   const [project, setProject] = useState<Project | null>(null)
-  useReveal()
+  usePortfolioMotion(pageRef)
   useEffect(() => {
     document.documentElement.lang = lang === 'en' ? 'en' : lang === 'zh' ? 'zh-CN' : 'zh-Hant'
   }, [lang])
 
   return (
-    <main className="archive-page">
+    <main className="archive-page" ref={pageRef}>
       <ArchiveNav lang={lang} setLang={setLang} />
       <ArchiveHero lang={lang} />
       <AboutArchive lang={lang} />

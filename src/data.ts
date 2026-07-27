@@ -3,26 +3,6 @@ export type Localized = Record<Lang, string>
 
 export const local = (en: string, zh: string, tc = zh): Localized => ({ en, zh, tc })
 
-// START HERE when editing the About Me section in StackBlitz.
-// Only replace the text between quotation marks; keep the surrounding punctuation.
-export const aboutMe = {
-  headline: local(
-    'A maker who carries an idea from research to release.',
-    '把一个想法从研究一路带到最终发布。',
-    '把一個想法從研究一路帶到最終發布。',
-  ),
-  introduction: local(
-    'Hazel Tang works across moving image, production, visual research and branded content. Her practice moves between narrative filmmaking, documentary observation, theatre production and data-informed short-form storytelling.',
-    'Hazel Tang 的实践横跨影像创作、制片、视觉研究与品牌内容，在剧情片、观察式纪录片、戏剧制作和数据驱动的短视频叙事之间流动。',
-    'Hazel Tang 的實踐橫跨影像創作、製片、視覺研究與品牌內容，在劇情片、觀察式紀錄片、戲劇製作和數據驅動的短視頻敘事之間流動。',
-  ),
-  detail: local(
-    'Rather than separating research from production, she treats each project as a connected process: finding the question, shaping the visual language, coordinating the work, and following the idea through to its final form.',
-    '她不把研究与制作分开，而是把每个项目看作一个连续过程：找到问题、建立视觉语言、协调实际工作，并将想法推进到最终形态。',
-    '她不把研究與製作分開，而是把每個項目看作一個連續過程：找到問題、建立視覺語言、協調實際工作，並將想法推進到最終形態。',
-  ),
-}
-
 export const lichicoAccountNote = local(
   'This account previously operated as the brand channel during the collaboration period. It is now a general account retained by the former company; the selected posts are shown here only as a record of work I contributed to.',
   '该账号曾在合作期内作为品牌内容账号运营；合作结束后已转为普通账号，现仍由前公司保管。本页仅用于展示本人参与制作的历史案例。',

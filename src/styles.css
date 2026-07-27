@@ -594,7 +594,7 @@ body::before {
 }
 
 /* ==========================================================================
-   Hazel Tang archive portfolio — 2026 redesign
+   Hazel Li archive portfolio — 2026 redesign
    Unique class names keep the optional ?figma reference sheet isolated.
    ========================================================================== */
 
@@ -1344,4 +1344,507 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .archive-page *,
   .archive-page *::before,
   .archive-page *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
+/* ==========================================================================
+   Editorial archive system — Syne display, Manrope body, technical mono labels
+   ========================================================================== */
+
+:root {
+  --archive-display: "Syne", "Avenir Next", "Helvetica Neue", "PingFang SC", "PingFang TC", sans-serif;
+  --archive-serif: var(--archive-display);
+  --archive-sans: "Manrope", "Noto Sans SC", "Noto Sans TC", "PingFang SC", "PingFang TC", "Microsoft YaHei", sans-serif;
+  --archive-mono: "SFMono-Regular", "Roboto Mono", Consolas, "Liberation Mono", monospace;
+  --archive-dot-size: 3rem;
+  --archive-dot-color: rgba(21, 22, 19, .22);
+}
+
+.archive-page { font-family: var(--archive-sans); }
+.archive-identity span,
+.archive-hero-credit h1,
+.archive-hero-credit h2,
+.outcome-heading h2,
+.film-archive-heading h2,
+.theatre-heading h2,
+.skills-heading h2,
+.drawer-hero h2,
+.personal-archive-heading h2,
+.contact-ticket h2 { font-family: var(--archive-display); }
+
+.archive-section,
+.archive-contact {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.archive-section::before,
+.archive-contact::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background-image:
+    radial-gradient(var(--archive-dot-color) 5%, transparent 6%),
+    radial-gradient(var(--archive-dot-color) 5%, transparent 6%);
+  background-position: 0 0, calc(var(--archive-dot-size) / 2) calc(var(--archive-dot-size) / 2);
+  background-size: var(--archive-dot-size) var(--archive-dot-size);
+  content: "";
+  opacity: .38;
+  pointer-events: none;
+}
+.archive-section > *,
+.archive-contact > * { position: relative; z-index: 1; }
+.film-production,
+.theatre-archive,
+.archive-contact { --archive-dot-color: rgba(244, 238, 226, .18); }
+
+/* Hero remains the only page without the dot archive field. */
+.archive-hero-credit { width: min(880px, 70vw); }
+.archive-hero-credit p {
+  max-width: 700px;
+  margin-bottom: clamp(24px, 3vw, 42px);
+  color: #d0c9bd;
+  font-size: clamp(11px, .9vw, 14px);
+  line-height: 1.65;
+  letter-spacing: .055em;
+}
+.archive-hero-credit h1 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .08em .18em;
+  font-weight: 500;
+  font-size: clamp(66px, 9.4vw, 154px);
+  line-height: .78;
+  letter-spacing: -.075em;
+  word-spacing: .08em;
+}
+.archive-hero-credit h1 span {
+  color: #b9b1a4;
+  font-size: .28em;
+  font-weight: 500;
+  letter-spacing: .015em;
+}
+.archive-hero-credit h2 {
+  margin-top: 30px;
+  font-size: clamp(15px, 1.25vw, 21px);
+  font-weight: 500;
+  letter-spacing: .16em;
+}
+.archive-hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  max-width: 760px;
+  margin-top: 24px;
+}
+.archive-hero-tags span {
+  padding: 8px 11px;
+  border: 1px solid rgba(237, 231, 219, .33);
+  color: #cfc8bc;
+  font: 9px/1 var(--archive-mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.archive-hero-note {
+  width: min(330px, 25vw);
+  font-size: clamp(12px, 1vw, 15px);
+  line-height: 1.62;
+}
+
+/* Pinned personal archive with independently draggable inner cards. */
+.about-archive.personal-archive {
+  min-height: 100svh;
+  padding: 0;
+  background-color: #f3f0e9;
+}
+.personal-archive .archive-section-label { z-index: 4; top: 96px; }
+.personal-archive-pin {
+  display: grid;
+  grid-template-columns: minmax(280px, .37fr) minmax(620px, 1fr);
+  gap: clamp(32px, 4vw, 72px);
+  align-items: center;
+  width: 100%;
+  min-height: 100svh;
+  padding: 120px clamp(24px, 5.3vw, 92px) 50px;
+}
+.personal-archive-heading { align-self: center; max-width: 480px; }
+.personal-archive-heading > span {
+  color: var(--archive-red);
+  font: 10px/1 var(--archive-mono);
+  letter-spacing: .12em;
+}
+.personal-archive-heading h2 {
+  margin: 28px 0 20px;
+  font-size: clamp(42px, 4.3vw, 74px);
+  font-weight: 500;
+  line-height: .98;
+  letter-spacing: -.055em;
+}
+.personal-archive-heading > p {
+  color: var(--archive-muted);
+  font: 9px/1.5 var(--archive-mono);
+  letter-spacing: .08em;
+}
+.personal-card-stage {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  height: min(74svh, 760px);
+}
+.personal-card-motion { position: absolute; will-change: transform, opacity; }
+.personal-card {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  border: 1px solid rgba(25, 26, 23, .2);
+  background: #f7f3ea;
+  box-shadow: 0 18px 42px rgba(45, 39, 31, .16);
+  color: var(--archive-ink);
+  cursor: grab;
+  touch-action: none;
+  will-change: transform;
+}
+.personal-card:active { cursor: grabbing; }
+.personal-card > span,
+.personal-card figcaption,
+.personal-card cite {
+  font: 9px/1.35 var(--archive-mono);
+  font-style: normal;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+.personal-card--portrait { padding: 12px 12px 38px; }
+.personal-card--portrait img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: 50% 36%;
+  filter: saturate(.72) contrast(1.03);
+}
+.personal-card--portrait figcaption { position: absolute; bottom: 14px; left: 14px; }
+.personal-paperclip {
+  position: absolute;
+  z-index: 3;
+  top: -20px;
+  right: 16%;
+  width: 22px;
+  height: 66px;
+  border: 2px solid #6f6b64;
+  border-radius: 13px;
+  transform: rotate(7deg);
+}
+.personal-paperclip::after {
+  position: absolute;
+  top: 6px;
+  left: 5px;
+  width: 8px;
+  height: 44px;
+  border: 1.5px solid #6f6b64;
+  border-radius: 8px;
+  content: "";
+}
+.personal-card--text { padding: clamp(22px, 2vw, 34px); }
+.personal-card--text h3 {
+  margin: 18px 0 16px;
+  font-family: var(--archive-display);
+  font-size: clamp(20px, 1.65vw, 29px);
+  font-weight: 600;
+  line-height: 1.03;
+  letter-spacing: -.035em;
+}
+.personal-card--text p {
+  margin: 15px 0 0;
+  font-size: clamp(12px, .88vw, 14px);
+  line-height: 1.65;
+}
+.personal-card--about { background: #ece6d9; }
+.personal-card--blue { background: #b8d5eb; }
+.personal-card--yellow { background: #ecd967; }
+.personal-card--green { background: #3c756a; color: #f5efe4; }
+.personal-card--passport {
+  padding: 26px;
+  background: #263d58;
+  color: #f2eee5;
+}
+.personal-card--passport dl { margin: 20px 0; }
+.personal-card--passport dl div {
+  display: grid;
+  grid-template-columns: 95px 1fr;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid rgba(255, 255, 255, .2);
+}
+.personal-card--passport dt,
+.personal-card--passport dd { margin: 0; font-size: 11px; line-height: 1.35; }
+.personal-card--passport dd { text-align: right; }
+.personal-card--passport > p { margin: 10px 0 0; color: #c7d1dc; font-size: 10px; line-height: 1.45; }
+.personal-card--quote {
+  padding: 28px;
+  background: var(--archive-red);
+  color: #f7eee2;
+}
+.personal-card--quote p {
+  margin: 0 0 26px;
+  font-family: var(--archive-display);
+  font-size: clamp(16px, 1.25vw, 21px);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -.025em;
+}
+.personal-card-motion--portrait { z-index: 5; top: 18%; left: 0; width: 25%; transform: rotate(-2.4deg); }
+.personal-card-motion--about { z-index: 4; top: 1%; left: 24%; width: 43%; transform: rotate(1.1deg); }
+.personal-card-motion--research { z-index: 7; top: 2%; right: 1%; width: 29%; transform: rotate(3deg); }
+.personal-card-motion--production { z-index: 8; bottom: 2%; left: 29%; width: 32%; transform: rotate(-2deg); }
+.personal-card-motion--culture { z-index: 6; top: 39%; right: 0; width: 34%; transform: rotate(1.6deg); }
+.personal-card-motion--language { z-index: 9; bottom: 1%; left: 0; width: 29%; transform: rotate(1.7deg); }
+.personal-card-motion--quote { z-index: 10; right: 17%; bottom: 3%; width: 34%; transform: rotate(-1.2deg); }
+.personal-card--zh { padding: clamp(26px, 2.5vw, 42px); }
+.personal-card--zh p { margin-top: 20px; font-size: clamp(14px, 1.05vw, 17px); line-height: 1.82; }
+.personal-card--zh-1 { background: #ece6d9; }
+.personal-card--zh-2 { background: #b8d5eb; }
+.personal-card--zh-3 { background: #ecd967; }
+.personal-card-motion--zh-1 { z-index: 4; top: 2%; left: 25%; width: 50%; transform: rotate(1.1deg); }
+.personal-card-motion--zh-2 { z-index: 7; top: 35%; right: 0; width: 44%; transform: rotate(2.4deg); }
+.personal-card-motion--zh-3 { z-index: 8; bottom: 0; left: 23%; width: 50%; transform: rotate(-1.8deg); }
+.personal-archive-footer {
+  position: absolute;
+  z-index: 5;
+  right: clamp(24px, 5.3vw, 92px);
+  bottom: 28px;
+  left: clamp(24px, 5.3vw, 92px);
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: 13px;
+  border-top: 1px solid rgba(25, 26, 23, .24);
+  color: var(--archive-muted);
+  font: 8px/1 var(--archive-mono);
+  letter-spacing: .1em;
+}
+.personal-archive-footer a { border-bottom: 1px solid; text-decoration: none; }
+
+/* Observer-driven contact ticket deck. */
+.archive-contact.ticket-contact {
+  display: grid;
+  grid-template-columns: minmax(210px, .3fr) minmax(680px, 1fr);
+  gap: clamp(34px, 6vw, 100px);
+  align-items: center;
+  min-height: 100svh;
+  padding: 110px clamp(24px, 5.3vw, 92px) 60px;
+  background: #10110f;
+}
+.ticket-contact-heading {
+  align-self: start;
+  padding-top: 28px;
+  color: #ddd6ca;
+}
+.ticket-contact-heading span { color: #8d8980; font: 10px/1 var(--archive-mono); letter-spacing: .12em; }
+.ticket-contact-heading p { margin: 22px 0 0; color: #77736c; font: 9px/1.5 var(--archive-mono); letter-spacing: .08em; }
+.contact-ticket-stage {
+  position: relative;
+  width: 100%;
+  height: min(72svh, 720px);
+}
+.contact-ticket {
+  position: absolute;
+  top: 0;
+  right: 4%;
+  bottom: 0;
+  left: 4%;
+  display: grid;
+  align-content: space-between;
+  min-height: 0;
+  padding: clamp(38px, 4vw, 72px);
+  border: 1px solid rgba(0, 0, 0, .45);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .36);
+  color: #0e100e;
+  transform-origin: 50% 100%;
+  will-change: transform, opacity;
+}
+.contact-ticket::before,
+.contact-ticket::after {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  bottom: 0;
+  width: 17px;
+  background: radial-gradient(circle, #10110f 7px, transparent 8px) center top / 17px 24px repeat-y;
+  content: "";
+  pointer-events: none;
+}
+.contact-ticket::before { left: -8px; }
+.contact-ticket::after { right: -8px; }
+.contact-ticket--blue { background: #b8d5eb; }
+.contact-ticket--yellow { background: #ecd967; }
+.contact-ticket--paper { background: #eee8dd; }
+.ticket-kicker {
+  display: flex;
+  justify-content: space-between;
+  font: 10px/1 var(--archive-mono);
+  letter-spacing: .1em;
+}
+.contact-ticket h2 {
+  position: relative;
+  z-index: 2;
+  max-width: 980px;
+  margin: clamp(30px, 5vh, 70px) 0;
+  font-size: clamp(48px, 6.2vw, 104px);
+  font-weight: 600;
+  line-height: .88;
+  letter-spacing: -.065em;
+}
+.contact-ticket > a {
+  position: relative;
+  z-index: 2;
+  width: max-content;
+  border-bottom: 1px solid;
+  font: 600 clamp(16px, 1.5vw, 24px)/1.7 var(--archive-sans);
+  text-decoration: none;
+}
+.ticket-orbit {
+  position: absolute;
+  right: 5%;
+  bottom: 8%;
+  display: flex;
+  align-items: center;
+}
+.ticket-orbit i { display: block; width: clamp(48px, 7vw, 112px); aspect-ratio: 1; border-radius: 50%; background: #10110f; }
+.ticket-orbit i:nth-child(2),
+.ticket-orbit i:nth-child(4) { margin: 0 clamp(-28px, -2vw, -14px); background: transparent; border: clamp(8px, 1.2vw, 18px) solid #10110f; }
+.ticket-keywords {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: min(740px, 90%);
+  margin-bottom: 42px;
+  border-top: 1px solid rgba(15, 16, 14, .4);
+  border-left: 1px solid rgba(15, 16, 14, .4);
+}
+.ticket-keywords span {
+  padding: 16px;
+  border-right: 1px solid rgba(15, 16, 14, .4);
+  border-bottom: 1px solid rgba(15, 16, 14, .4);
+  font: 9px/1.2 var(--archive-mono);
+  letter-spacing: .08em;
+}
+.contact-ticket--paper nav { display: flex; flex-wrap: wrap; gap: 28px; border-top: 1px solid rgba(15, 16, 14, .3); padding-top: 22px; }
+.contact-ticket--paper nav a { font: 600 11px/1 var(--archive-mono); text-decoration: none; }
+.ticket-contact-controls {
+  position: absolute !important;
+  z-index: 8 !important;
+  right: clamp(24px, 5.3vw, 92px);
+  bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: #bbb4a8;
+  font: 10px/1 var(--archive-mono);
+}
+.ticket-contact-controls button {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid rgba(235, 228, 215, .32);
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+@media (max-width: 1100px) and (min-width: 901px) {
+  .personal-archive-pin { grid-template-columns: minmax(240px, .33fr) minmax(560px, 1fr); gap: 22px; }
+  .personal-archive-heading h2 { font-size: 47px; }
+  .personal-card-stage { height: min(69svh, 680px); }
+  .personal-card--text p { font-size: 11px; }
+}
+
+@media (max-width: 900px) {
+  .archive-hero-credit { width: 100%; }
+  .archive-hero-credit h1 { font-size: clamp(56px, 17vw, 92px); line-height: .84; }
+  .archive-hero-credit p { max-width: 90%; }
+  .archive-hero-tags { max-width: 88%; }
+  .personal-archive { padding: 112px 20px 90px !important; }
+  .personal-archive .archive-section-label { display: none; }
+  .personal-archive-pin { display: block; min-height: 0; padding: 0; }
+  .personal-archive-heading { max-width: 620px; margin-bottom: 56px; }
+  .personal-archive-heading h2 { font-size: clamp(40px, 11vw, 64px); }
+  .personal-card-stage,
+  .personal-card-stage--zh {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    height: auto;
+  }
+  .personal-card-motion,
+  .personal-card-motion--portrait,
+  .personal-card-motion--about,
+  .personal-card-motion--research,
+  .personal-card-motion--production,
+  .personal-card-motion--culture,
+  .personal-card-motion--language,
+  .personal-card-motion--quote,
+  .personal-card-motion--zh-1,
+  .personal-card-motion--zh-2,
+  .personal-card-motion--zh-3 {
+    position: relative;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    width: 100%;
+    transform: none;
+  }
+  .personal-card { touch-action: pan-y; }
+  .personal-card-motion--portrait { width: min(78%, 360px); margin: 0 auto 16px; }
+  .personal-card--text p,
+  .personal-card--zh p { font-size: 15px; }
+  .personal-archive-footer {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    flex-wrap: wrap;
+    margin-top: 50px;
+  }
+  .archive-contact.ticket-contact {
+    display: block;
+    min-height: 900px;
+    padding: 90px 20px 78px;
+  }
+  .ticket-contact-heading { display: flex; justify-content: space-between; gap: 20px; padding-top: 0; }
+  .ticket-contact-heading p { margin: 0; text-align: right; }
+  .contact-ticket-stage { height: 650px; margin-top: 40px; }
+  .contact-ticket { right: 0; left: 0; padding: 42px 34px; }
+  .contact-ticket h2 { font-size: clamp(45px, 10vw, 72px); line-height: .92; }
+  .ticket-orbit { opacity: .55; }
+  .ticket-contact-controls { right: 20px; bottom: 22px; }
+}
+
+@media (max-width: 560px) {
+  .archive-hero { min-height: 100svh; padding-bottom: 52px; }
+  .archive-hero-credit { margin-bottom: 100px; }
+  .archive-hero-credit h1 { display: block; font-size: clamp(54px, 17vw, 75px); line-height: .88; }
+  .archive-hero-credit h1 span { display: block; margin-top: .5em; font-size: .34em; }
+  .archive-hero-credit h2 { margin-top: 18px; font-size: 12px; }
+  .archive-hero-credit p { max-width: 100%; font-size: 10px; }
+  .archive-hero-tags { max-width: 100%; margin-top: 18px; }
+  .archive-hero-tags span { padding: 7px 8px; font-size: 8px; }
+  .contact-ticket-stage { height: 590px; }
+  .contact-ticket { padding: 34px 24px; }
+  .contact-ticket h2 { font-size: clamp(39px, 12vw, 58px); }
+  .ticket-kicker { font-size: 8px; }
+  .contact-ticket > a { font-size: 15px; }
+  .ticket-keywords { grid-template-columns: 1fr; margin-bottom: 20px; }
+  .ticket-keywords span { padding: 10px; font-size: 8px; }
+  .contact-ticket--paper nav { display: grid; gap: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .personal-card-motion,
+  .personal-card,
+  .contact-ticket { will-change: auto; }
 }

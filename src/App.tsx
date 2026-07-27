@@ -1,10 +1,11 @@
 import { CSSProperties, RefObject, useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { Draggable } from 'gsap/Draggable'
+import { Observer } from 'gsap/Observer'
 import { useGSAP } from '@gsap/react'
 import {
   abilities,
-  aboutMe,
   commercials,
   films,
   Lang,
@@ -15,7 +16,7 @@ import {
   theatre,
 } from './data'
 
-gsap.registerPlugin(ScrollTrigger, useGSAP)
+gsap.registerPlugin(ScrollTrigger, Draggable, Observer, useGSAP)
 
 const labels: Record<string, Localized> = {
   about: { en: 'About me', zh: '关于我', tc: '關於我' },
@@ -246,8 +247,12 @@ function ArchiveNav({ lang, setLang }: { lang: Lang; setLang: (lang: Lang) => vo
 
   return (
     <header className="archive-nav">
-      <a className="archive-identity" href="#top" aria-label="Hazel Tang, back to top">
-        <span>HAZEL TANG</span>
+      <a
+        className="archive-identity"
+        href="#top"
+        aria-label={t(lang, 'Hazel Li, back to top', '李瑭，返回顶部', '李瑭，返回頂部')}
+      >
+        <span>{t(lang, 'HAZEL LI', '李瑭', '李瑭')}</span>
         <small>MOVING IMAGE ARCHIVE</small>
       </a>
       <button
@@ -277,21 +282,37 @@ function ArchiveNav({ lang, setLang }: { lang: Lang; setLang: (lang: Lang) => vo
 }
 
 function ArchiveHero({ lang }: { lang: Lang }) {
+  const isEnglish = lang === 'en'
+  const heroTags = isEnglish
+    ? ['Brand Marketing', 'Content Strategy', 'Film Production']
+    : ['创意内容策划', '品牌内容策略', '短视频内容制作', '品牌出海与本土化']
+
   return (
     <section className="archive-hero" id="top">
       <video src="/media/hero/ambient-loop.mp4" autoPlay muted loop playsInline aria-hidden="true" />
       <div className="archive-hero-wash" />
       <div className="archive-hero-topline">
-        <span>PORTFOLIO / SELECTED WORK / 2022—2026</span>
-        <span>HONG KONG · LONDON · SHENZHEN</span>
+        <span>PERSONAL PORTFOLIO / 2026</span>
+        <span>{isEnglish ? 'Hong Kong · Guangdong · London' : 'Base 香港和广东'}</span>
       </div>
       <div className="archive-hero-credit">
-        <p>{t(lang, 'A moving-image maker and production researcher', '影像创作者与制作研究者', '影像創作者與製作研究者')}</p>
-        <h1>Hazel Tang</h1>
-        <h2>{t(lang, 'Moving image / Production / Visual research', '影像／制作／视觉研究', '影像／製作／視覺研究')}</h2>
+        <p>
+          {isEnglish
+            ? 'Creative Content Producer with experience in brand globalization, short-form content strategy and independent film production.'
+            : '用内容故事链接品牌与用户，打通策略洞察到创意落地的全链路。'}
+        </p>
+        <h1>{isEnglish ? <>Li Tang <span>(Hazel)</span></> : <>李瑭 <span>Hazel</span></>}</h1>
+        {isEnglish && <h2>Creative Content Producer</h2>}
+        <div className="archive-hero-tags" aria-label={isEnglish ? 'Areas of practice' : '工作方向'}>
+          {heroTags.map((tag) => <span key={tag}>{tag}</span>)}
+        </div>
       </div>
       <div className="archive-hero-note">
-        <span>{t(lang, 'Ideas travel through people, images and production realities.', '想法在人、影像与制作现实之间移动。', '想法在人、影像與製作現實之間移動。')}</span>
+        <span>
+          {isEnglish
+            ? <>I create stories that connect brands,<br />people and culture.<br /><br />From research and strategy<br />to production and execution.</>
+            : '用内容故事链接品牌与用户，打通策略洞察到创意落地的全链路。'}
+        </span>
       </div>
       <a className="archive-enter" href="#about">
         <i />
@@ -303,43 +324,231 @@ function ArchiveHero({ lang }: { lang: Lang }) {
 }
 
 function AboutArchive({ lang }: { lang: Lang }) {
+  const sectionRef = useRef<HTMLElement>(null)
+  const pinRef = useRef<HTMLDivElement>(null)
+  const stageRef = useRef<HTMLDivElement>(null)
+  const isEnglish = lang === 'en'
+
+  useGSAP((_, contextSafe) => {
+    const section = sectionRef.current
+    const pin = pinRef.current
+    const stage = stageRef.current
+    if (!section || !pin || !stage || !contextSafe) return
+
+    const motionCards = gsap.utils.toArray<HTMLElement>('.personal-card-motion')
+    const draggableCards = gsap.utils.toArray<HTMLElement>('.personal-card')
+    const draggables: Draggable[] = []
+    let layer = 30
+
+    const focusCard = contextSafe((element: HTMLElement) => {
+      layer += 1
+      element.style.zIndex = String(layer)
+      gsap.to(element, { boxShadow: '0 28px 60px rgba(45, 39, 31, .25)', duration: 0.2, ease: 'power2.out', overwrite: 'auto' })
+    })
+    const releaseCard = contextSafe((element: HTMLElement) => {
+      gsap.to(element, { boxShadow: '0 18px 42px rgba(45, 39, 31, .16)', duration: 0.28, ease: 'power2.out', overwrite: 'auto' })
+    })
+
+    const mm = gsap.matchMedia()
+    mm.add(
+      {
+        desktop: '(min-width: 901px)',
+        mobile: '(max-width: 900px)',
+        reduceMotion: '(prefers-reduced-motion: reduce)',
+      },
+      (context) => {
+        const { desktop, reduceMotion } = context.conditions as { desktop: boolean; mobile: boolean; reduceMotion: boolean }
+        if (reduceMotion) {
+          gsap.set(motionCards, { clearProps: 'all' })
+          return
+        }
+
+        if (desktop) {
+          draggables.push(...Draggable.create(draggableCards, {
+            type: 'x,y',
+            dragClickables: true,
+            cursor: 'grab',
+            activeCursor: 'grabbing',
+            onPress: function () { focusCard(this.target as HTMLElement) },
+            onRelease: function () { releaseCard(this.target as HTMLElement) },
+          }))
+
+          const spread = gsap.timeline({
+            defaults: { ease: 'none' },
+            scrollTrigger: {
+              trigger: section,
+              pin,
+              start: 'top top',
+              end: `+=${Math.max(1500, motionCards.length * 260)}`,
+              scrub: 0.85,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+            },
+          })
+
+          spread
+            .addLabel('archive-in')
+            .fromTo(
+              '.personal-archive-heading > *',
+              { y: 34, autoAlpha: 0 },
+              { y: 0, autoAlpha: 1, duration: 0.3, stagger: 0.04 },
+              'archive-in',
+            )
+            .fromTo(
+              motionCards,
+              {
+                x: (index) => (index % 2 === 0 ? 1 : -1) * (120 + index * 16),
+                y: (index) => 200 + index * 24,
+                rotation: (index) => (index % 2 === 0 ? -1 : 1) * (8 + index * 1.5),
+                scale: 0.84,
+                autoAlpha: 0,
+              },
+              {
+                x: 0,
+                y: 0,
+                rotation: 0,
+                scale: 1,
+                autoAlpha: 1,
+                duration: 0.62,
+                stagger: 0.07,
+              },
+              'archive-in+=0.08',
+            )
+            .fromTo(
+              '.personal-archive-footer',
+              { y: 20, autoAlpha: 0 },
+              { y: 0, autoAlpha: 1, duration: 0.25 },
+              '>-0.08',
+            )
+        } else {
+          gsap.fromTo(
+            motionCards,
+            { y: 32, autoAlpha: 0 },
+            {
+              y: 0,
+              autoAlpha: 1,
+              duration: 0.7,
+              stagger: 0.09,
+              ease: 'power3.out',
+              scrollTrigger: { trigger: stage, start: 'top 84%', once: true },
+            },
+          )
+        }
+      },
+      section,
+    )
+
+    return () => {
+      draggables.forEach((instance) => instance.kill())
+      mm.revert()
+    }
+  }, { scope: sectionRef, dependencies: [lang], revertOnUpdate: true })
+
   return (
-    <section className="archive-section about-archive" id="about">
-      <div className="archive-section-label">ABOUT / PROFILE / NOTES</div>
-      <div className="about-scrapbook archive-reveal">
-        <div className="about-paper about-paper--back">
-          <span>BA MEDIA · MSOCSC</span>
-          <span>LONDON ↔ HONG KONG</span>
-        </div>
-        <figure className="about-photo">
-          <span className="paperclip" aria-hidden="true" />
-          <img src="/media/profile/hazel-profile.jpg" alt="Hazel Tang in front of illuminated lanterns" />
-          <figcaption>HAZEL / FIELD NOTE 01</figcaption>
-        </figure>
-        <div className="about-story">
-          <span className="about-stamp">PERSONAL ARCHIVE · 2026</span>
-          <h2>{aboutMe.headline[lang]}</h2>
-          <p>{aboutMe.introduction[lang]}</p>
-          <p>{aboutMe.detail[lang]}</p>
-          <div className="about-handnote">
-            {t(
-              lang,
-              'I am interested in the moment when a question becomes an image—and in the practical work required to help that image exist.',
-              '我关心一个问题如何变成画面，也关心让这个画面真正存在所需要的实际工作。',
-              '我關心一個問題如何變成畫面，也關心讓這個畫面真正存在所需要的實際工作。',
-            )}
+    <section className="archive-section about-archive personal-archive" id="about" ref={sectionRef}>
+      <div className="archive-section-label">{isEnglish ? 'PERSONAL ARCHIVE / PROFILE / DRAG TO REARRANGE' : 'PERSONAL ARCHIVE / 关于我 / 可拖动卡片'}</div>
+      <div className="personal-archive-pin" ref={pinRef}>
+        <header className="personal-archive-heading">
+          <span>{isEnglish ? 'PERSONAL ARCHIVE · 2026' : '关于我'}</span>
+          <h2>
+            {isEnglish
+              ? <>A Creative Content Producer<br />bridging research,<br />strategy and production.</>
+              : '关于我'}
+          </h2>
+          <p>{isEnglish ? 'SCROLL TO OPEN THE ARCHIVE · DRAG ANY CARD' : '滚动展开档案 · 卡片可自由拖动'}</p>
+        </header>
+
+        <div className={`personal-card-stage ${isEnglish ? '' : 'personal-card-stage--zh'}`} ref={stageRef}>
+          <div className="personal-card-motion personal-card-motion--portrait">
+            <figure className="personal-card personal-card--portrait">
+              <span className="personal-paperclip" aria-hidden="true" />
+              <img
+                src="/media/profile/hazel-profile.jpg"
+                alt={t(lang, 'Hazel Li in front of illuminated lanterns', '李瑭站在点亮的灯笼前', '李瑭站在點亮的燈籠前')}
+              />
+              <figcaption>HAZEL LI / FIELD NOTE 01</figcaption>
+            </figure>
           </div>
+
+          {isEnglish ? (
+            <>
+              <div className="personal-card-motion personal-card-motion--about">
+                <article className="personal-card personal-card--text personal-card--about">
+                  <span>ABOUT</span>
+                  <p>I am a creative content producer working across brand storytelling, short-form content, film production and documentary practice from UCL BA Media</p>
+                  <p>With a sociology background in Media, Culture and Creative Cities in HKU, I combine audience research, visual storytelling and production management to transform ideas into meaningful content.</p>
+                </article>
+              </div>
+              <div className="personal-card-motion personal-card-motion--research">
+                <article className="personal-card personal-card--text personal-card--blue">
+                  <span>WHAT I BRING / 01</span>
+                  <h3>Research-driven storytelling</h3>
+                  <p>I use audience insights, cultural observation and market research to discover meaningful stories and develop content strategies.</p>
+                </article>
+              </div>
+              <div className="personal-card-motion personal-card-motion--production">
+                <article className="personal-card personal-card--text personal-card--yellow">
+                  <span>WHAT I BRING / 02</span>
+                  <h3>End-to-end production</h3>
+                  <p>From concept development and scripting<br />to directing, coordination and final delivery.</p>
+                </article>
+              </div>
+              <div className="personal-card-motion personal-card-motion--culture">
+                <article className="personal-card personal-card--text personal-card--green">
+                  <span>WHAT I BRING / 03</span>
+                  <h3>Cross-cultural communication</h3>
+                  <p>Working across Hong Kong, Mainland China and international environments, I communicate across Mandarin, Cantonese and English-speaking contexts.</p>
+                </article>
+              </div>
+              <div className="personal-card-motion personal-card-motion--language">
+                <aside className="personal-card personal-card--passport">
+                  <span>LANGUAGES</span>
+                  <dl>
+                    <div><dt>Mandarin</dt><dd>Native</dd></div>
+                    <div><dt>Cantonese</dt><dd>Native</dd></div>
+                    <div><dt>English</dt><dd>Professional Working Proficiency</dd></div>
+                  </dl>
+                  <p>Currently based in Hong Kong</p>
+                  <p>Experience across Hong Kong, Shenzhen and London</p>
+                </aside>
+              </div>
+              <div className="personal-card-motion personal-card-motion--quote">
+                <blockquote className="personal-card personal-card--quote">
+                  <p>I work between research and production —<br />finding the question,<br />shaping the story,<br />and bringing ideas into their final form.</p>
+                  <cite>HAZEL LI · 2026</cite>
+                </blockquote>
+              </div>
+            </>
+          ) : (
+            <>
+              {[
+                '我是一位连接研究、策略与制作的创意内容制作人。本科阶段在UCL学习影视制作与媒体研究，让我建立了视觉叙事与内容制作能力；随后在港大媒体、文化与创意城市方向的学习中，我进一步通过社会学视角、定性研究和受众分析理解内容背后的文化语境与用户行为逻辑。',
+                '在商业内容实践中，我曾参与网易有道短视频运营及易健子品牌Lichico的TikTok品牌出海内容策略，从用户研究、竞品分析到脚本创作和视频制作，探索如何将洞察转化为具有传播力的内容。',
+                '我认为好内容的前提是理解受众——他们是谁，在什么场景看，什么东西能真正留住他们。学术训练给了我研究能力，制作经验让我能亲手把洞察落地成片。',
+              ].map((paragraph, index) => (
+                <div className={`personal-card-motion personal-card-motion--zh-${index + 1}`} key={paragraph}>
+                  <article className={`personal-card personal-card--text personal-card--zh personal-card--zh-${index + 1}`}>
+                    <span>{String(index + 1).padStart(2, '0')} / 03</span>
+                    <p>{paragraph}</p>
+                  </article>
+                </div>
+              ))}
+            </>
+          )}
         </div>
-        <aside className="about-timeline">
-          <span>{t(lang, 'Recent route', '近期路径', '近期路徑')}</span>
-          <dl>
-            <div><dt>2025—26</dt><dd>HKU · Media, Culture & Creative Cities</dd></div>
-            <div><dt>2024—25</dt><dd>Lichico · Creative Content Producer</dd></div>
-            <div><dt>2021—24</dt><dd>UCL · BA Media</dd></div>
-            <div><dt>2023</dt><dd>NetEase Youdao · Content & Operations</dd></div>
-          </dl>
-          <a href="/Tang_Li_Hazel_CV.docx" download>{t(lang, 'Download résumé ↓', '下载简历 ↓', '下載簡歷 ↓')}</a>
-        </aside>
+
+        <footer className="personal-archive-footer">
+          {isEnglish ? (
+            <>
+              <span>CONTENT STRATEGY</span>
+              <span>CREATIVE PRODUCTION</span>
+              <span>VISUAL STORYTELLING</span>
+              <span>AUDIENCE RESEARCH</span>
+            </>
+          ) : (
+            <a href="/Tang_Li_Hazel_CV.docx" download>下载简历 ↓</a>
+          )}
+        </footer>
       </div>
     </section>
   )
@@ -820,15 +1029,84 @@ function ProjectDrawer({ project, lang, onClose }: { project: Project; lang: Lan
 }
 
 function ArchiveFooter({ lang }: { lang: Lang }) {
+  const footerRef = useRef<HTMLElement>(null)
+  const [activeTicket, setActiveTicket] = useState(0)
+  const ticketCount = 3
+
+  useGSAP((_, contextSafe) => {
+    if (!footerRef.current || !contextSafe) return
+    const cycle = contextSafe((direction: number) => {
+      setActiveTicket((current) => (current + direction + ticketCount) % ticketCount)
+    })
+    const observer = Observer.create({
+      target: footerRef.current,
+      type: 'wheel,touch,pointer',
+      tolerance: 28,
+      preventDefault: false,
+      onUp: () => cycle(1),
+      onLeft: () => cycle(1),
+      onDown: () => cycle(-1),
+      onRight: () => cycle(-1),
+    })
+    return () => observer.kill()
+  }, { scope: footerRef })
+
+  useGSAP(() => {
+    const tickets = gsap.utils.toArray<HTMLElement>('.contact-ticket')
+    tickets.forEach((ticket, index) => {
+      const relative = (index - activeTicket + tickets.length) % tickets.length
+      gsap.to(ticket, {
+        xPercent: relative === 0 ? 0 : relative === 1 ? 10 : -10,
+        y: relative === 0 ? 0 : relative === 1 ? 34 : 66,
+        rotation: relative === 0 ? 0 : relative === 1 ? 3.2 : -3.2,
+        scale: relative === 0 ? 1 : relative === 1 ? 0.94 : 0.88,
+        autoAlpha: relative === 0 ? 1 : relative === 1 ? 0.68 : 0.38,
+        zIndex: tickets.length - relative,
+        duration: 0.72,
+        ease: 'power3.inOut',
+        overwrite: 'auto',
+      })
+    })
+  }, { scope: footerRef, dependencies: [activeTicket], revertOnUpdate: false })
+
   return (
-    <footer className="archive-contact">
-      <span>CONTACT / AVAILABILITY / 2026</span>
-      <h2>{t(lang, 'Available for film, production and visual-content opportunities.', '期待电影、制片与视觉内容方向的合作机会。', '期待電影、製片與視覺內容方向的合作機會。')}</h2>
-      <a href="mailto:canlibx@outlook.com">canlibx@outlook.com ↗</a>
-      <div>
-        <a href="/Tang_Li_Hazel_CV.docx" download>RÉSUMÉ ↓</a>
-        <a href="https://www.tiktok.com/@sunnystylemart" target="_blank" rel="noreferrer">TIKTOK ↗</a>
-        <a href="#top">{t(lang, 'BACK TO TOP ↑', '返回顶部 ↑', '返回頂部 ↑')}</a>
+    <footer className="archive-contact ticket-contact" ref={footerRef}>
+      <div className="ticket-contact-heading">
+        <span>CONTACT / AVAILABILITY / 2026</span>
+        <p>{t(lang, 'SCROLL · SWIPE · USE ARROWS', '滚动 · 滑动 · 使用箭头', '滾動 · 滑動 · 使用箭頭')}</p>
+      </div>
+      <div className="contact-ticket-stage">
+        <article className="contact-ticket contact-ticket--blue">
+          <div className="ticket-kicker"><span>OPEN FOR COLLABORATION</span><span>01 / 03</span></div>
+          <h2>{t(lang, 'Available for film, production and visual-content opportunities.', '期待电影、制片与视觉内容方向的合作机会。', '期待電影、製片與視覺內容方向的合作機會。')}</h2>
+          <a href="mailto:canlibx@outlook.com">canlibx@outlook.com ↗</a>
+          <div className="ticket-orbit" aria-hidden="true"><i /><i /><i /><i /><i /></div>
+        </article>
+        <article className="contact-ticket contact-ticket--yellow">
+          <div className="ticket-kicker"><span>HAZEL LI / 李瑭</span><span>02 / 03</span></div>
+          <h2>{t(lang, 'Creative Content Producer', '创意内容策划', '創意內容策劃')}</h2>
+          <div className="ticket-keywords">
+            <span>BRAND MARKETING</span>
+            <span>CONTENT STRATEGY</span>
+            <span>FILM PRODUCTION</span>
+            <span>VISUAL STORYTELLING</span>
+          </div>
+          <a href="mailto:canlibx@outlook.com">START A CONVERSATION ↗</a>
+        </article>
+        <article className="contact-ticket contact-ticket--paper">
+          <div className="ticket-kicker"><span>INDEX / LINKS</span><span>03 / 03</span></div>
+          <h2>{t(lang, 'Keep the archive moving.', '让档案继续生长。', '讓檔案繼續生長。')}</h2>
+          <nav>
+            <a href="/Tang_Li_Hazel_CV.docx" download>RÉSUMÉ ↓</a>
+            <a href="https://www.tiktok.com/@sunnystylemart" target="_blank" rel="noreferrer">TIKTOK ↗</a>
+            <a href="#top">{t(lang, 'BACK TO TOP ↑', '返回顶部 ↑', '返回頂部 ↑')}</a>
+          </nav>
+        </article>
+      </div>
+      <div className="ticket-contact-controls" aria-label={t(lang, 'Contact card controls', '联系卡片切换', '聯絡卡片切換')}>
+        <button onClick={() => setActiveTicket((activeTicket - 1 + ticketCount) % ticketCount)} aria-label={t(lang, 'Previous card', '上一张', '上一張')}>←</button>
+        <span>{String(activeTicket + 1).padStart(2, '0')} / 03</span>
+        <button onClick={() => setActiveTicket((activeTicket + 1) % ticketCount)} aria-label={t(lang, 'Next card', '下一张', '下一張')}>→</button>
       </div>
     </footer>
   )

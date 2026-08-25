@@ -1,10 +1,10 @@
-# Hazel Li（李瑭）作品集：StackBlitz 导入与编辑说明
+# Hazel Tang 作品集：StackBlitz 导入与编辑说明
 
 这是一套完整的 React + Vite 网站。StackBlitz 左侧可以修改内容，右侧会实时显示最终网页、滚动动画、TikTok 播放器、电影播放器、图片放大浏览和所有响应式效果。
 
 ## 一、导入 StackBlitz
 
-1. 解压 `Hazel-Li-Portfolio-GSAP-Motion.zip`。
+1. 解压 `Hazel-Tang-Portfolio-StackBlitz.zip`。
 2. 打开 [StackBlitz](https://stackblitz.com/)，登录后选择 **New Project → JavaScript Blank**。
 3. 打开解压后的文件夹，选中里面的全部文件和文件夹。
 4. 把它们拖到 StackBlitz 左侧的文件栏。
@@ -16,13 +16,17 @@
 
 ### 修改 About Me 和项目文字
 
-首屏和 About Me 的最终批准文案位于 `src/App.tsx` 的 `ArchiveHero` 与 `AboutArchive`。电影、戏剧、Lichico 和 TikTok 链接位于 `src/data.ts`。
+打开 `src/data.ts`。文件顶部有：
+
+`START HERE when editing the About Me section`
+
+在它下面修改 About Me。电影、戏剧、Lichico 和 TikTok 链接也都在同一个文件中。
 
 - `en`：英文
 - `zh`：简体中文
 - `tc`：繁体中文
 
-只替换标签之间或引号中的文字，不要删除逗号、引号、括号或 HTML 标签。保存后，右侧网页会自动更新。
+只替换引号中的文字，不要删除逗号、引号或括号。保存后，右侧网页会自动更新。
 
 ### 修改 Find the Shape of the Wind
 
@@ -88,9 +92,9 @@ TikTok 官方嵌入播放器不会稳定地把播放量数据交给这个网站�
 - 颜色、排版、响应式与动画初始样式：`src/styles.css`
 - 图片和简历：`public/`
 
-不熟悉代码时，建议优先只修改 `src/data.ts`、`src/App.tsx` 中的批准文案，以及 `public/media/`。
+不熟悉代码时，建议优先只修改 `src/data.ts` 和 `public/media/`。
 
-当前动画包括首屏依次进场、第二页固定滚动展开、桌面端档案卡片拖动、滚动显现、卡片分批出现、桌面端轻微视差、导航随滚动收起、详情抽屉、播放器扩展、图片灯箱和最后一页票券切换。电脑或手机开启“减少动态效果”时，网站会自动停用位移与时间线，内容仍会完整显示。
+当前动画包括首屏依次进场、滚动显现、卡片分批出现、桌面端轻微视差、导航随滚动收起、详情抽屉、播放器扩展和图片灯箱。电脑或手机开启“减少动态效果”时，网站会自动停用位移与时间线，内容仍会完整显示。
 
 如果只修改文字、图片、链接和项目顺序，不需要碰 GSAP 代码。若要调节速度，请在 `src/App.tsx` 搜索 `duration`；数值越小越快。不要删除 `scope`、`useGSAP`、`matchMedia` 或 `ScrollTrigger` 的清理代码，否则热更新后可能出现动画重复。
 

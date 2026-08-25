@@ -3,10 +3,30 @@ export type Localized = Record<Lang, string>
 
 export const local = (en: string, zh: string, tc = zh): Localized => ({ en, zh, tc })
 
+// START HERE when editing the About Me section in StackBlitz.
+// Only replace the text between quotation marks; keep the surrounding punctuation.
+export const aboutMe = {
+  headline: local(
+    'A maker who carries an idea from research to release.',
+    '把一个想法从研究一路带到最终发布。',
+    '把一個想法從研究一路帶到最終發布。',
+  ),
+  introduction: local(
+    'Hazel Tang works across moving image, production, visual research and branded content. Her practice moves between narrative filmmaking, documentary observation, theatre production and data-informed short-form storytelling.',
+    'Hazel Tang 的实践横跨影像创作、制片、视觉研究与品牌内容，在剧情片、观察式纪录片、戏剧制作和数据驱动的短视频叙事之间流动。',
+    'Hazel Tang 的實踐橫跨影像創作、製片、視覺研究與品牌內容，在劇情片、觀察式紀錄片、戲劇製作和數據驅動的短視頻敘事之間流動。',
+  ),
+  detail: local(
+    'Rather than separating research from production, she treats each project as a connected process: finding the question, shaping the visual language, coordinating the work, and following the idea through to its final form.',
+    '她不把研究与制作分开，而是把每个项目看作一个连续过程：找到问题、建立视觉语言、协调实际工作，并将想法推进到最终形态。',
+    '她不把研究與製作分開，而是把每個項目看作一個連續過程：找到問題、建立視覺語言、協調實際工作，並將想法推進到最終形態。',
+  ),
+}
+
 export const lichicoAccountNote = local(
-  'This account previously operated as the brand channel during the collaboration period. It is now a general account retained by the former company; the selected posts are shown here only as a record of work I contributed to.',
-  '该账号曾在合作期内作为品牌内容账号运营；合作结束后已转为普通账号，现仍由前公司保管。本页仅用于展示本人参与制作的历史案例。',
-  '該帳號曾在合作期內作為品牌內容帳號營運；合作結束後已轉為普通帳號，現仍由前公司保管。本頁僅用於展示本人參與製作的歷史案例。',
+  "This project was produced during my internship at LICHICO. After the collaboration ended, the company retained ownership of the official account and later renamed it. The original account was published as LICHICO Official during my internship. The case study shown here focuses on my contribution to the creative strategy and production process rather than the account's current operation.",
+  '本项目完成于我在 LICHICO 实习期间。合作结束后，公司保留了官方账号的所有权并在之后更名；实习期间该账号以 LICHICO Official 名义发布。本案例聚焦于我对创意策略与制作流程的贡献，而非账号当前的运营状态。',
+  '本項目完成於我在 LICHICO 實習期間。合作結束後，公司保留了官方帳號的所有權並在之後更名；實習期間該帳號以 LICHICO Official 名義發布。本案例聚焦於我對創意策略與製作流程的貢獻，而非帳號當前的營運狀態。',
 )
 
 export type ProjectKind = 'film' | 'theatre' | 'commercial'
@@ -224,13 +244,13 @@ export const commercials: Project[] = [
   {
     id: 'lichico', kind: 'commercial', title: local('Lichico Global Content', 'Lichico 品牌出海内容', 'Lichico 品牌出海內容'), year: '2024–2025', featured: true, accent: '#7f5c43', platform: 'TikTok',
     role: local('Creative Content Producer', '创意内容制作', '創意內容製作'),
-    summary: local('End-to-end short-form content for fitness equipment and wellness products, from research and USP extraction to shooting supervision and post-production.', '围绕健身器材与健康产品的全流程短视频制作，包括研究、USP 提炼、拍摄执行和后期。', '圍繞健身器材與健康產品的全流程短視頻製作，包括研究、USP 提煉、拍攝執行和後期。'),
-    responsibilities: local('Trend research, competitor analysis, scripting, shooting supervision, creative testing and performance-based iteration.', '趋势研究、竞品分析、脚本、拍摄监督、创意测试与数据迭代。', '趨勢研究、競品分析、腳本、拍攝監督、創意測試與數據迭代。'), reflection: local('Case-study notes and selected videos to be added.', '案例复盘与精选视频待补充。', '案例復盤與精選視頻待補充。'),
+    summary: local('A strategy-to-production content system for LICHICO foldable walking pads in the US TikTok Shop market.', '为 LICHICO 折叠走步机进入美国 TikTok Shop 市场建立从策略到制作的内容系统。', '為 LICHICO 摺疊走步機進入美國 TikTok Shop 市場建立從策略到製作的內容系統。'),
+    responsibilities: local('Research, creative strategy, scripting, filming, editing and performance-led iteration.', '研究、创意策略、脚本、拍摄、剪辑与基于表现的快速迭代。', '研究、創意策略、腳本、拍攝、剪輯與基於表現的快速迭代。'),
+    reflection: local('Research gave the work direction; production tested it; performance data determined what to refine next. The strongest outcome was a repeatable loop from insight to execution.', '研究为内容确定方向，制作负责验证，数据决定下一轮优化。最重要的成果，是建立了一个可以重复运行的“洞察—执行”闭环。', '研究為內容確定方向，製作負責驗證，數據決定下一輪優化。最重要的成果，是建立了一個可以重複運行的「洞察—執行」閉環。'),
     externalUrl: 'https://www.tiktok.com/@sunnystylemart',
     metrics: [
       { label: local('Videos delivered', '交付视频', '交付視頻'), value: '21' },
-      { label: local('Total exposure', '累计曝光', '累計曝光'), value: '200K+' },
-      { label: local('Top organic video', '最高自然播放', '最高自然播放'), value: '80K' },
+      { label: local('Organic exposure', '自然曝光', '自然曝光'), value: '200K+' },
       { label: local('vs. industry conversion benchmark', '高于行业转化基准', '高於行業轉化基準'), value: '+30%' },
     ],
   },
@@ -248,48 +268,69 @@ export const commercials: Project[] = [
   },
 ]
 
-export const lichicoHighlights = [
+export interface LichicoVideo {
+  id: string
+  views: string
+  poster: string
+  src: string
+  descriptor: Localized
+}
+
+export const lichicoHighlights: LichicoVideo[] = [
+  { id: 'dollar-concept', views: '79.6K', poster: '/media/lichico/posters/dollar-79-6k.png', src: '/media/lichico/videos/lichico-dollar-concept.mp4', descriptor: local('Character hook / product comedy', '人物钩子 / 产品喜剧', '人物鈎子 / 產品喜劇') },
+  { id: 'ring-transition', views: '15.7K', poster: '/media/lichico/posters/ring-15-7k.png', src: '/media/lichico/videos/lichico-ring-transition.mp4', descriptor: local('Ring transition / visual reveal', '戒指转场 / 视觉揭示', '戒指轉場 / 視覺揭示') },
+  { id: 'watch-your-back', views: '10.4K', poster: '/media/lichico/posters/watch-your-back-10-4k.png', src: '/media/lichico/videos/lichico-watch-your-back.mp4', descriptor: local('Narrative tension / product payoff', '剧情张力 / 产品落点', '劇情張力 / 產品落點') },
+  { id: 'product-test', views: '13.2K', poster: '/media/lichico/posters/product-test-13-2k.png', src: '/media/lichico/videos/lichico-product-test.mp4', descriptor: local('Product test / usage demonstration', '产品测试 / 使用演示', '產品測試 / 使用演示') },
+  { id: 'home-treadmill', views: '520.3K', poster: '/media/lichico/posters/home-treadmill-520-3k.png', src: '/media/lichico/videos/lichico-home-treadmill.mp4', descriptor: local('Home treadmill / direct benefit', '家庭走步机 / 直接利益点', '家庭走步機 / 直接利益點') },
+  { id: 'led-transition', views: 'LOCAL MASTER', poster: '/media/lichico/posters/led-transition-local.png', src: '/media/lichico/videos/lichico-led-transition.mp4', descriptor: local('LED transition / original concept', 'LED 转场 / 原创概念', 'LED 轉場 / 原創概念') },
+]
+
+export interface LichicoEvidence {
+  id: string
+  title: Localized
+  whatIDid: Localized
+  items: Localized[]
+  image: string
+  imageLabel: Localized
+  reserved: Localized[]
+}
+
+export const lichicoEvidence: LichicoEvidence[] = [
   {
-    id: '7471228652626119978',
-    views: '10.4K',
-    poster: '/media/lichico/highlight-watch-your-back-10-4k.png',
-    descriptor: local('Story-led product demonstration', '剧情化产品演示', '劇情化產品演示'),
-    url: 'https://www.tiktok.com/@sunnystylemart/video/7471228652626119978',
+    id: 'market-research',
+    title: local('Market Research', '市场研究', '市場研究'),
+    whatIDid: local('Mapped competitors, audience behaviours and product opportunities before any creative production.', '在创意制作前梳理竞品、受众行为与产品机会。', '在創意製作前梳理競品、受眾行為與產品機會。'),
+    items: [local('Competitor analysis', '竞品分析', '競品分析'), local('Social listening', '社媒聆听', '社媒聆聽'), local('User pain points', '用户痛点', '用戶痛點'), local('Product positioning', '产品定位', '產品定位')],
+    image: '/media/lichico/evidence/ogr-competitor-comparison.png',
+    imageLabel: local('OGR competitor and price comparison', 'OGR 竞品与价格对比', 'OGR 競品與價格對比'),
+    reserved: [local('Social listening extract', '社媒聆听节选', '社媒聆聽節選'), local('Pricing comparison', '价格带对比', '價格帶對比')],
   },
   {
-    id: '7459716581187259691',
-    views: '',
-    poster: '',
-    descriptor: local('Product hook and short-form pacing', '产品钩子与短视频节奏', '產品鉤子與短視頻節奏'),
-    url: 'https://www.tiktok.com/@sunnystylemart/video/7459716581187259691',
+    id: 'creative-strategy',
+    title: local('Creative Strategy', '创意策略', '創意策略'),
+    whatIDid: local('Translated product features into platform-native storytelling and creator frameworks.', '把产品卖点转化为符合平台语境的叙事与达人框架。', '把產品賣點轉化為符合平台語境的敘事與達人框架。'),
+    items: [local('Creator reference board', '达人参考板', '達人參考板'), local('Content framework', '内容框架', '內容框架'), local('Video planning', '视频策划', '視頻策劃'), local('Story structure', '叙事结构', '敘事結構')],
+    image: '/media/lichico/evidence/lichico-video-structure.png',
+    imageLabel: local('Creative insights of video structure', '视频结构创意洞察', '視頻結構創意洞察'),
+    reserved: [local('Storyboard', '故事板', '故事板'), local('Content matrix', '内容矩阵', '內容矩陣')],
   },
   {
-    id: '7476297570520780074',
-    views: '',
-    poster: '',
-    descriptor: local('Audience-first creative testing', '以受众为先的创意测试', '以受眾為先的創意測試'),
-    url: 'https://www.tiktok.com/@sunnystylemart/video/7476297570520780074',
+    id: 'production',
+    title: local('Production', '制作执行', '製作執行'),
+    whatIDid: local('Planned and produced short-form videos from scripting to final edit.', '从脚本到成片，规划并制作短视频内容。', '從腳本到成片，規劃並製作短視頻內容。'),
+    items: [local('Shot list', '镜头清单', '鏡頭清單'), local('Camera planning', '机位规划', '機位規劃'), local('Filming workflow', '拍摄流程', '拍攝流程'), local('Editing', '剪辑', '剪輯')],
+    image: '/media/lichico/evidence/lichico-shot-list.png',
+    imageLabel: local('Product-proof shot list', '卖点证明镜头表', '賣點證明鏡頭表'),
+    reserved: [local('Monitor records', '监看记录', '監看記錄'), local('Lighting setup', '灯光方案', '燈光方案')],
   },
   {
-    id: '7476297230614367530',
-    views: '',
-    poster: '',
-    descriptor: local('Fitness product storytelling', '健身产品叙事', '健身產品敘事'),
-    url: 'https://www.tiktok.com/@sunnystylemart/video/7476297230614367530',
-  },
-  {
-    id: '7472352596259278126',
-    views: '',
-    poster: '',
-    descriptor: local('Visual hook and benefit framing', '视觉钩子与卖点表达', '視覺鉤子與賣點表達'),
-    url: 'https://www.tiktok.com/@sunnystylemart/video/7472352596259278126',
-  },
-  {
-    id: '7470854358431845674',
-    views: '',
-    poster: '',
-    descriptor: local('Iterated short-form concept', '迭代后的短视频创意', '迭代後的短視頻創意'),
-    url: 'https://www.tiktok.com/@sunnystylemart/video/7470854358431845674',
+    id: 'campaign-execution',
+    title: local('Campaign Execution', '活动执行', '活動執行'),
+    whatIDid: local('Scaled content production for seasonal campaigns while iterating creatives based on performance.', '为季节性活动扩大量产，并基于表现快速迭代创意。', '為季節性活動擴大量產，並基於表現快速迭代創意。'),
+    items: [local('Black Friday campaign', '黑五活动', '黑五活動'), local('High-volume production', '高频内容生产', '高頻內容生產'), local('Rapid creative iteration', '快速创意迭代', '快速創意迭代'), local('Team campaign results', '团队活动成果', '團隊活動成果')],
+    image: '/media/lichico/evidence/lichico-full-script.png',
+    imageLabel: local('Bilingual script and direction notes', '双语脚本与导演备注', '雙語腳本與導演備註'),
+    reserved: [local('Publishing workflow', '发布流程', '發布流程'), local('Analytics review', '数据复盘', '數據複盤')],
   },
 ]
 

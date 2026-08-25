@@ -1,22 +1,22 @@
 import { CSSProperties, RefObject, useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { Draggable } from 'gsap/Draggable'
-import { Observer } from 'gsap/Observer'
 import { useGSAP } from '@gsap/react'
 import {
   abilities,
+  aboutMe,
   commercials,
   films,
   Lang,
   lichicoAccountNote,
+  lichicoEvidence,
   lichicoHighlights,
   Localized,
   Project,
   theatre,
 } from './data'
 
-gsap.registerPlugin(ScrollTrigger, Draggable, Observer, useGSAP)
+gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 const labels: Record<string, Localized> = {
   about: { en: 'About me', zh: '关于我', tc: '關於我' },
@@ -247,12 +247,8 @@ function ArchiveNav({ lang, setLang }: { lang: Lang; setLang: (lang: Lang) => vo
 
   return (
     <header className="archive-nav">
-      <a
-        className="archive-identity"
-        href="#top"
-        aria-label={t(lang, 'Hazel Li, back to top', '李瑭，返回顶部', '李瑭，返回頂部')}
-      >
-        <span>{t(lang, 'HAZEL LI', '李瑭', '李瑭')}</span>
+      <a className="archive-identity" href="#top" aria-label="Hazel Tang, back to top">
+        <span>HAZEL TANG</span>
         <small>MOVING IMAGE ARCHIVE</small>
       </a>
       <button
@@ -282,37 +278,21 @@ function ArchiveNav({ lang, setLang }: { lang: Lang; setLang: (lang: Lang) => vo
 }
 
 function ArchiveHero({ lang }: { lang: Lang }) {
-  const isEnglish = lang === 'en'
-  const heroTags = isEnglish
-    ? ['Brand Marketing', 'Content Strategy', 'Film Production']
-    : ['创意内容策划', '品牌内容策略', '短视频内容制作', '品牌出海与本土化']
-
   return (
     <section className="archive-hero" id="top">
       <video src="/media/hero/ambient-loop.mp4" autoPlay muted loop playsInline aria-hidden="true" />
       <div className="archive-hero-wash" />
       <div className="archive-hero-topline">
-        <span>PERSONAL PORTFOLIO / 2026</span>
-        <span>{isEnglish ? 'Hong Kong · Guangdong · London' : 'Base 香港和广东'}</span>
+        <span>PORTFOLIO / SELECTED WORK / 2022—2026</span>
+        <span>HONG KONG · LONDON · SHENZHEN</span>
       </div>
       <div className="archive-hero-credit">
-        <p>
-          {isEnglish
-            ? 'Creative Content Producer with experience in brand globalization, short-form content strategy and independent film production.'
-            : '用内容故事链接品牌与用户，打通策略洞察到创意落地的全链路。'}
-        </p>
-        <h1>{isEnglish ? <>Li Tang <span>(Hazel)</span></> : <>李瑭 <span>Hazel</span></>}</h1>
-        {isEnglish && <h2>Creative Content Producer</h2>}
-        <div className="archive-hero-tags" aria-label={isEnglish ? 'Areas of practice' : '工作方向'}>
-          {heroTags.map((tag) => <span key={tag}>{tag}</span>)}
-        </div>
+        <p>{t(lang, 'A moving-image maker and production researcher', '影像创作者与制作研究者', '影像創作者與製作研究者')}</p>
+        <h1>Hazel Tang</h1>
+        <h2>{t(lang, 'Moving image / Production / Visual research', '影像／制作／视觉研究', '影像／製作／視覺研究')}</h2>
       </div>
       <div className="archive-hero-note">
-        <span>
-          {isEnglish
-            ? <>I create stories that connect brands,<br />people and culture.<br /><br />From research and strategy<br />to production and execution.</>
-            : '用内容故事链接品牌与用户，打通策略洞察到创意落地的全链路。'}
-        </span>
+        <span>{t(lang, 'Ideas travel through people, images and production realities.', '想法在人、影像与制作现实之间移动。', '想法在人、影像與製作現實之間移動。')}</span>
       </div>
       <a className="archive-enter" href="#about">
         <i />
@@ -324,330 +304,248 @@ function ArchiveHero({ lang }: { lang: Lang }) {
 }
 
 function AboutArchive({ lang }: { lang: Lang }) {
-  const sectionRef = useRef<HTMLElement>(null)
-  const pinRef = useRef<HTMLDivElement>(null)
-  const stageRef = useRef<HTMLDivElement>(null)
-  const isEnglish = lang === 'en'
-
-  useGSAP((_, contextSafe) => {
-    const section = sectionRef.current
-    const pin = pinRef.current
-    const stage = stageRef.current
-    if (!section || !pin || !stage || !contextSafe) return
-
-    const motionCards = gsap.utils.toArray<HTMLElement>('.personal-card-motion')
-    const draggableCards = gsap.utils.toArray<HTMLElement>('.personal-card')
-    const draggables: Draggable[] = []
-    let layer = 30
-
-    const focusCard = contextSafe((element: HTMLElement) => {
-      layer += 1
-      element.style.zIndex = String(layer)
-      gsap.to(element, { boxShadow: '0 28px 60px rgba(45, 39, 31, .25)', duration: 0.2, ease: 'power2.out', overwrite: 'auto' })
-    })
-    const releaseCard = contextSafe((element: HTMLElement) => {
-      gsap.to(element, { boxShadow: '0 18px 42px rgba(45, 39, 31, .16)', duration: 0.28, ease: 'power2.out', overwrite: 'auto' })
-    })
-
-    const mm = gsap.matchMedia()
-    mm.add(
-      {
-        desktop: '(min-width: 901px)',
-        mobile: '(max-width: 900px)',
-        reduceMotion: '(prefers-reduced-motion: reduce)',
-      },
-      (context) => {
-        const { desktop, reduceMotion } = context.conditions as { desktop: boolean; mobile: boolean; reduceMotion: boolean }
-        if (reduceMotion) {
-          gsap.set(motionCards, { clearProps: 'all' })
-          return
-        }
-
-        if (desktop) {
-          draggables.push(...Draggable.create(draggableCards, {
-            type: 'x,y',
-            dragClickables: true,
-            cursor: 'grab',
-            activeCursor: 'grabbing',
-            onPress: function () { focusCard(this.target as HTMLElement) },
-            onRelease: function () { releaseCard(this.target as HTMLElement) },
-          }))
-
-          const spread = gsap.timeline({
-            defaults: { ease: 'none' },
-            scrollTrigger: {
-              trigger: section,
-              pin,
-              start: 'top top',
-              end: `+=${Math.max(1500, motionCards.length * 260)}`,
-              scrub: 0.85,
-              anticipatePin: 1,
-              invalidateOnRefresh: true,
-            },
-          })
-
-          spread
-            .addLabel('archive-in')
-            .fromTo(
-              '.personal-archive-heading > *',
-              { y: 34, autoAlpha: 0 },
-              { y: 0, autoAlpha: 1, duration: 0.3, stagger: 0.04 },
-              'archive-in',
-            )
-            .fromTo(
-              motionCards,
-              {
-                x: (index) => (index % 2 === 0 ? 1 : -1) * (120 + index * 16),
-                y: (index) => 200 + index * 24,
-                rotation: (index) => (index % 2 === 0 ? -1 : 1) * (8 + index * 1.5),
-                scale: 0.84,
-                autoAlpha: 0,
-              },
-              {
-                x: 0,
-                y: 0,
-                rotation: 0,
-                scale: 1,
-                autoAlpha: 1,
-                duration: 0.62,
-                stagger: 0.07,
-              },
-              'archive-in+=0.08',
-            )
-            .fromTo(
-              '.personal-archive-footer',
-              { y: 20, autoAlpha: 0 },
-              { y: 0, autoAlpha: 1, duration: 0.25 },
-              '>-0.08',
-            )
-        } else {
-          gsap.fromTo(
-            motionCards,
-            { y: 32, autoAlpha: 0 },
-            {
-              y: 0,
-              autoAlpha: 1,
-              duration: 0.7,
-              stagger: 0.09,
-              ease: 'power3.out',
-              scrollTrigger: { trigger: stage, start: 'top 84%', once: true },
-            },
-          )
-        }
-      },
-      section,
-    )
-
-    return () => {
-      draggables.forEach((instance) => instance.kill())
-      mm.revert()
-    }
-  }, { scope: sectionRef, dependencies: [lang], revertOnUpdate: true })
-
   return (
-    <section className="archive-section about-archive personal-archive" id="about" ref={sectionRef}>
-      <div className="archive-section-label">{isEnglish ? 'PERSONAL ARCHIVE / PROFILE / DRAG TO REARRANGE' : 'PERSONAL ARCHIVE / 关于我 / 可拖动卡片'}</div>
-      <div className="personal-archive-pin" ref={pinRef}>
-        <header className="personal-archive-heading">
-          <span>{isEnglish ? 'PERSONAL ARCHIVE · 2026' : '关于我'}</span>
-          <h2>
-            {isEnglish
-              ? <>A Creative Content Producer<br />bridging research,<br />strategy and production.</>
-              : '关于我'}
-          </h2>
-          <p>{isEnglish ? 'SCROLL TO OPEN THE ARCHIVE · DRAG ANY CARD' : '滚动展开档案 · 卡片可自由拖动'}</p>
-        </header>
-
-        <div className={`personal-card-stage ${isEnglish ? '' : 'personal-card-stage--zh'}`} ref={stageRef}>
-          <div className="personal-card-motion personal-card-motion--portrait">
-            <figure className="personal-card personal-card--portrait">
-              <span className="personal-paperclip" aria-hidden="true" />
-              <img
-                src="/media/profile/hazel-profile.jpg"
-                alt={t(lang, 'Hazel Li in front of illuminated lanterns', '李瑭站在点亮的灯笼前', '李瑭站在點亮的燈籠前')}
-              />
-              <figcaption>HAZEL LI / FIELD NOTE 01</figcaption>
-            </figure>
-          </div>
-
-          {isEnglish ? (
-            <>
-              <div className="personal-card-motion personal-card-motion--about">
-                <article className="personal-card personal-card--text personal-card--about">
-                  <span>ABOUT</span>
-                  <p>I am a creative content producer working across brand storytelling, short-form content, film production and documentary practice from UCL BA Media</p>
-                  <p>With a sociology background in Media, Culture and Creative Cities in HKU, I combine audience research, visual storytelling and production management to transform ideas into meaningful content.</p>
-                </article>
-              </div>
-              <div className="personal-card-motion personal-card-motion--research">
-                <article className="personal-card personal-card--text personal-card--blue">
-                  <span>WHAT I BRING / 01</span>
-                  <h3>Research-driven storytelling</h3>
-                  <p>I use audience insights, cultural observation and market research to discover meaningful stories and develop content strategies.</p>
-                </article>
-              </div>
-              <div className="personal-card-motion personal-card-motion--production">
-                <article className="personal-card personal-card--text personal-card--yellow">
-                  <span>WHAT I BRING / 02</span>
-                  <h3>End-to-end production</h3>
-                  <p>From concept development and scripting<br />to directing, coordination and final delivery.</p>
-                </article>
-              </div>
-              <div className="personal-card-motion personal-card-motion--culture">
-                <article className="personal-card personal-card--text personal-card--green">
-                  <span>WHAT I BRING / 03</span>
-                  <h3>Cross-cultural communication</h3>
-                  <p>Working across Hong Kong, Mainland China and international environments, I communicate across Mandarin, Cantonese and English-speaking contexts.</p>
-                </article>
-              </div>
-              <div className="personal-card-motion personal-card-motion--language">
-                <aside className="personal-card personal-card--passport">
-                  <span>LANGUAGES</span>
-                  <dl>
-                    <div><dt>Mandarin</dt><dd>Native</dd></div>
-                    <div><dt>Cantonese</dt><dd>Native</dd></div>
-                    <div><dt>English</dt><dd>Professional Working Proficiency</dd></div>
-                  </dl>
-                  <p>Currently based in Hong Kong</p>
-                  <p>Experience across Hong Kong, Shenzhen and London</p>
-                </aside>
-              </div>
-              <div className="personal-card-motion personal-card-motion--quote">
-                <blockquote className="personal-card personal-card--quote">
-                  <p>I work between research and production —<br />finding the question,<br />shaping the story,<br />and bringing ideas into their final form.</p>
-                  <cite>HAZEL LI · 2026</cite>
-                </blockquote>
-              </div>
-            </>
-          ) : (
-            <>
-              {[
-                '我是一位连接研究、策略与制作的创意内容制作人。本科阶段在UCL学习影视制作与媒体研究，让我建立了视觉叙事与内容制作能力；随后在港大媒体、文化与创意城市方向的学习中，我进一步通过社会学视角、定性研究和受众分析理解内容背后的文化语境与用户行为逻辑。',
-                '在商业内容实践中，我曾参与网易有道短视频运营及易健子品牌Lichico的TikTok品牌出海内容策略，从用户研究、竞品分析到脚本创作和视频制作，探索如何将洞察转化为具有传播力的内容。',
-                '我认为好内容的前提是理解受众——他们是谁，在什么场景看，什么东西能真正留住他们。学术训练给了我研究能力，制作经验让我能亲手把洞察落地成片。',
-              ].map((paragraph, index) => (
-                <div className={`personal-card-motion personal-card-motion--zh-${index + 1}`} key={paragraph}>
-                  <article className={`personal-card personal-card--text personal-card--zh personal-card--zh-${index + 1}`}>
-                    <span>{String(index + 1).padStart(2, '0')} / 03</span>
-                    <p>{paragraph}</p>
-                  </article>
-                </div>
-              ))}
-            </>
-          )}
+    <section className="archive-section about-archive" id="about">
+      <div className="archive-section-label">ABOUT / PROFILE / NOTES</div>
+      <div className="about-scrapbook archive-reveal">
+        <div className="about-paper about-paper--back">
+          <span>BA MEDIA · MSOCSC</span>
+          <span>LONDON ↔ HONG KONG</span>
         </div>
-
-        <footer className="personal-archive-footer">
-          {isEnglish ? (
-            <>
-              <span>CONTENT STRATEGY</span>
-              <span>CREATIVE PRODUCTION</span>
-              <span>VISUAL STORYTELLING</span>
-              <span>AUDIENCE RESEARCH</span>
-            </>
-          ) : (
-            <a href="/Tang_Li_Hazel_CV.docx" download>下载简历 ↓</a>
-          )}
-        </footer>
+        <figure className="about-photo">
+          <span className="paperclip" aria-hidden="true" />
+          <img src="/media/profile/hazel-profile.jpg" alt="Hazel Tang in front of illuminated lanterns" />
+          <figcaption>HAZEL / FIELD NOTE 01</figcaption>
+        </figure>
+        <div className="about-story">
+          <span className="about-stamp">PERSONAL ARCHIVE · 2026</span>
+          <h2>{aboutMe.headline[lang]}</h2>
+          <p>{aboutMe.introduction[lang]}</p>
+          <p>{aboutMe.detail[lang]}</p>
+          <div className="about-handnote">
+            {t(
+              lang,
+              'I am interested in the moment when a question becomes an image—and in the practical work required to help that image exist.',
+              '我关心一个问题如何变成画面，也关心让这个画面真正存在所需要的实际工作。',
+              '我關心一個問題如何變成畫面，也關心讓這個畫面真正存在所需要的實際工作。',
+            )}
+          </div>
+        </div>
+        <aside className="about-timeline">
+          <span>{t(lang, 'Recent route', '近期路径', '近期路徑')}</span>
+          <dl>
+            <div><dt>2025—26</dt><dd>HKU · Media, Culture & Creative Cities</dd></div>
+            <div><dt>2024—25</dt><dd>Lichico · Creative Content Producer</dd></div>
+            <div><dt>2021—24</dt><dd>UCL · BA Media</dd></div>
+            <div><dt>2023</dt><dd>NetEase Youdao · Content & Operations</dd></div>
+          </dl>
+          <a href="/Tang_Li_Hazel_CV.docx" download>{t(lang, 'Download résumé ↓', '下载简历 ↓', '下載簡歷 ↓')}</a>
+        </aside>
       </div>
     </section>
   )
 }
 
-function LichicoOutcome({ lang, onOpen }: { lang: Lang; onOpen: (project: Project) => void }) {
-  const playerRef = useRef<HTMLDivElement>(null)
+function LichicoOutcome({ lang }: { lang: Lang }) {
+  const sectionRef = useRef<HTMLElement>(null)
   const [activeIndex, setActiveIndex] = useState(0)
-  const [showPoster, setShowPoster] = useState(true)
+  const [activeFile, setActiveFile] = useState<{ src: string; label: string } | null>(null)
   const project = commercials[0]
   const active = lichicoHighlights[activeIndex]
 
   useEffect(() => {
-    setShowPoster(true)
-    const timer = window.setTimeout(() => setShowPoster(false), 900)
-    return () => window.clearTimeout(timer)
-  }, [activeIndex])
+    if (!activeFile) return
+    const closeOnEscape = (event: KeyboardEvent) => event.key === 'Escape' && setActiveFile(null)
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', closeOnEscape)
+    return () => {
+      document.body.style.overflow = ''
+      window.removeEventListener('keydown', closeOnEscape)
+    }
+  }, [activeFile])
 
   useGSAP(() => {
-    if (!showPoster || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    gsap.fromTo(
-      '.outcome-poster',
-      { scale: 1.035, autoAlpha: 0 },
-      { scale: 1, autoAlpha: 1, duration: 0.6, ease: 'power2.out', overwrite: 'auto' },
-    )
-  }, { scope: playerRef, dependencies: [activeIndex, showPoster], revertOnUpdate: true })
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced) return
+
+    gsap.fromTo('.lichico-local-video', { scale: 1.025, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.65, ease: 'power2.out' })
+    const cleanups: Array<() => void> = []
+    gsap.utils.toArray<HTMLElement>('.lichico-local-hover').forEach((card) => {
+      const enter = () => gsap.to(card, { y: -7, rotate: -0.25, duration: 0.35, ease: 'power2.out', overwrite: 'auto' })
+      const leave = () => gsap.to(card, { y: 0, rotate: 0, duration: 0.45, ease: 'power2.out', overwrite: 'auto' })
+      card.addEventListener('pointerenter', enter)
+      card.addEventListener('pointerleave', leave)
+      cleanups.push(() => {
+        card.removeEventListener('pointerenter', enter)
+        card.removeEventListener('pointerleave', leave)
+      })
+    })
+    return () => cleanups.forEach((cleanup) => cleanup())
+  }, { scope: sectionRef, dependencies: [activeIndex], revertOnUpdate: true })
+
+  const bts = [
+    { src: '/media/lichico/bts/studio-lighting.jpg', label: t(lang, 'Studio lighting', '棚拍灯光', '棚拍燈光') },
+    { src: '/media/lichico/bts/black-friday-direction.jpg', label: t(lang, 'Live direction', '现场导演', '現場導演') },
+    { src: '/media/lichico/bts/black-friday-set.jpg', label: t(lang, 'Campaign set', '活动拍摄现场', '活動拍攝現場') },
+  ]
+
+  const reservedBts = [
+    t(lang, 'Camera setup / archive slot', '机位设置 / 素材位', '機位設置 / 素材位'),
+    t(lang, 'Editing / archive slot', '剪辑工作 / 素材位', '剪輯工作 / 素材位'),
+    t(lang, 'Working documents / archive slot', '工作文件 / 素材位', '工作文件 / 素材位'),
+  ]
 
   return (
-    <section className="archive-section outcome-archive" id="outcome">
-      <div className="archive-section-label">WORK OUTCOME / LICHICO / 2024—2025</div>
-      <div className="outcome-heading archive-reveal">
-        <div>
-          <span>CASE STUDY / GLOBAL SHORT-FORM</span>
-          <h2>{project.title[lang]}</h2>
+    <section className="archive-section outcome-archive" id="outcome" ref={sectionRef}>
+      <div className="lichico-screen lichico-screen--overview">
+        <div className="archive-section-label">WORK OUTCOME / LICHICO / 2024—2025</div>
+        <div className="outcome-heading archive-reveal">
+          <div>
+            <span>01 / PROJECT OVERVIEW</span>
+            <h2>{project.title[lang]}</h2>
+          </div>
+          <p>{project.summary[lang]}</p>
         </div>
-        <p>{project.summary[lang]}</p>
-      </div>
-      <div className="outcome-layout archive-reveal">
-        <div className="outcome-context">
-          <p>{project.responsibilities?.[lang]}</p>
-          <p className="outcome-account-note">{lichicoAccountNote[lang]}</p>
-          <div className="outcome-results">
-            {project.metrics?.map((metric) => (
-              <div key={metric.label.en}>
-                <strong>{metric.value}</strong>
-                <span>{metric.label[lang]}</span>
-              </div>
+
+        <div className="lichico-meta archive-reveal">
+          <div><span>PRODUCT</span><b>{t(lang, 'Foldable walking pad / US TikTok Shop', '折叠走步机 / 美国 TikTok Shop', '摺疊走步機 / 美國 TikTok Shop')}</b></div>
+          <div><span>ROLE</span><b>{t(lang, 'Creative Content Producer', '创意内容制作', '創意內容製作')}</b></div>
+          <div><span>DURATION</span><b>SEP 2024—MAR 2025</b></div>
+          <div><span>TEAM SIZE</span><b>{t(lang, 'Lean cross-functional team', '精简跨职能团队', '精簡跨職能團隊')}</b></div>
+        </div>
+
+        <div className="outcome-layout archive-reveal">
+          <div className="outcome-context">
+            <p>{project.responsibilities?.[lang]}</p>
+            <div className="outcome-results">
+              {project.metrics?.map((metric) => (
+                <div key={metric.label.en}>
+                  <strong>{metric.value}</strong>
+                  <span>{metric.label[lang]}</span>
+                </div>
+              ))}
+            </div>
+            <p className="outcome-account-note">{lichicoAccountNote[lang]}</p>
+            <a className="lichico-account-link" href={project.externalUrl} target="_blank" rel="noreferrer">@SUNNYSTYLEMART ↗</a>
+          </div>
+
+          <div className="outcome-player">
+            <div className="outcome-player-frame">
+              <video
+                key={active.id}
+                className="lichico-local-video"
+                src={active.src}
+                poster={active.poster}
+                controls
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+              />
+            </div>
+            <div className="lichico-video-caption"><span>{active.descriptor[lang]}</span><b>{active.views}</b></div>
+          </div>
+
+          <div className="outcome-selector" aria-label="Selected Lichico videos">
+            {lichicoHighlights.map((video, index) => (
+              <button key={video.id} className={index === activeIndex ? 'active' : ''} onClick={() => setActiveIndex(index)}>
+                <div><img src={video.poster} alt="" /></div>
+                <span>{video.descriptor[lang]}</span>
+                <b>PUBLIC VIEW / {video.views}</b>
+              </button>
             ))}
           </div>
-          <div className="outcome-links">
-            <a href={project.externalUrl} target="_blank" rel="noreferrer">@SUNNYSTYLEMART ↗</a>
-            <button onClick={() => onOpen(project)}>{t(lang, 'Read case notes ↗', '查看案例笔记 ↗', '查看案例筆記 ↗')}</button>
-          </div>
+        </div>
+      </div>
+
+      <div className="lichico-screen lichico-screen--files" id="lichico-files">
+        <div className="lichico-section-head archive-reveal">
+          <span>02 / WORKING FILES</span>
+          <h2>{t(lang, 'Four core capabilities', '四项核心能力', '四項核心能力')}</h2>
+          <p>{t(lang, 'Strategy first. Execution follows.', '先建立策略，再进入执行。', '先建立策略，再進入執行。')}</p>
         </div>
 
-        <div className="outcome-player" ref={playerRef}>
-          <div className="outcome-player-frame">
-            <iframe
-              key={active.id}
-              src={`https://www.tiktok.com/player/v1/${active.id}?controls=1&description=1&music_info=0&rel=0&autoplay=0`}
-              title={`Lichico TikTok: ${active.descriptor.en}`}
-              allow="fullscreen; autoplay; encrypted-media; picture-in-picture"
-              loading="lazy"
-            />
-            {showPoster && (
-              <button className="outcome-poster" onClick={() => setShowPoster(false)} aria-label={t(lang, 'Reveal video player', '显示视频播放器', '顯示視頻播放器')}>
-                {active.poster ? (
-                  <img src={active.poster} alt="" />
-                ) : (
-                  <span style={{ '--poster-tone': `${(activeIndex + 1) * 36}deg` } as CSSProperties}>
-                    <i>LICHICO</i>
-                    <b>{active.descriptor[lang]}</b>
-                  </span>
-                )}
-                <em>{active.views ? `▶ ${active.views}` : '▶ VIEW POST'}</em>
-              </button>
-            )}
-          </div>
-          <a href={active.url} target="_blank" rel="noreferrer">
-            {t(lang, 'Open this post on TikTok ↗', '在 TikTok 打开此视频 ↗', '在 TikTok 打開此視頻 ↗')}
-          </a>
-        </div>
-
-        <div className="outcome-selector" aria-label="Selected Lichico videos">
-          {lichicoHighlights.map((video, index) => (
-            <button key={video.id} className={index === activeIndex ? 'active' : ''} onClick={() => setActiveIndex(index)}>
-              <div>
-                {video.poster ? <img src={video.poster} alt="" /> : <i style={{ '--poster-tone': `${(index + 1) * 36}deg` } as CSSProperties} />}
+        <div className="lichico-capability-grid">
+          {lichicoEvidence.map((capability, index) => (
+            <article className="lichico-capability-card lichico-local-hover archive-reveal" key={capability.id}>
+              <div className="lichico-capability-copy">
+                <span>0{index + 1}</span>
+                <h3>{capability.title[lang]}</h3>
+                <b>WHAT I DID</b>
+                <p>{capability.whatIDid[lang]}</p>
+                <ul>{capability.items.map((item) => <li key={item.en}>{item[lang]}</li>)}</ul>
               </div>
-              <span>{video.descriptor[lang]}</span>
-              <b>{video.views || t(lang, 'Selected post', '精选视频', '精選視頻')}</b>
-            </button>
+              <button className="lichico-file-thumb" onClick={() => setActiveFile({ src: capability.image, label: capability.imageLabel[lang] })}>
+                <img src={capability.image} alt={capability.imageLabel[lang]} />
+                <span>{capability.imageLabel[lang]} ↗</span>
+              </button>
+              <div className="lichico-reserved-row">
+                {capability.reserved.map((slot) => <i key={slot.en}>{slot[lang]}</i>)}
+              </div>
+            </article>
           ))}
         </div>
+
+        <div className="lichico-bts archive-reveal">
+          <div className="lichico-bts-title"><span>BEHIND THE SCENES</span><b>03 IMAGES + 03 ARCHIVE SLOTS</b></div>
+          <div className="lichico-bts-grid">
+            {bts.map((item) => (
+              <button className="lichico-bts-card lichico-local-hover" key={item.src} onClick={() => setActiveFile({ src: item.src, label: item.label })}>
+                <img src={item.src} alt={item.label} /><span>{item.label}</span>
+              </button>
+            ))}
+            {reservedBts.map((label, index) => <div className="lichico-bts-card lichico-bts-card--reserved" key={label}><i>0{index + 4}</i><span>{label}</span></div>)}
+          </div>
+        </div>
       </div>
-      <div className="netease-note archive-reveal">
-        <span>NEXT FILE / NETEASE YOUDAO</span>
-        <p>{t(lang, 'Archive space reserved for the next case study.', '下一份商业案例的档案位置已预留。', '下一份商業案例的檔案位置已預留。')}</p>
+
+      <div className="lichico-screen lichico-screen--outcome" id="lichico-results">
+        <div className="lichico-section-head archive-reveal">
+          <span>03 / CAMPAIGN OUTCOME</span>
+          <h2>{t(lang, 'Two products. One operating system.', '两个产品，同一套内容系统。', '兩個產品，同一套內容系統。')}</h2>
+          <p>{t(lang, 'Campaign delivery and market-entry research are presented with equal weight.', '活动交付与出海研究在此并列呈现。', '活動交付與出海研究在此並列呈現。')}</p>
+        </div>
+
+        <div className="lichico-campaign-grid archive-reveal">
+          <article className="lichico-campaign-panel lichico-campaign-panel--blackfriday">
+            <span>01 / LICHICO WALKING PAD</span>
+            <h3>BLACK FRIDAY CAMPAIGN</h3>
+            <p>{t(lang, 'Scaled short-form production across scripts, sets and edits while refining hooks, calls to action and promotional framing.', '围绕脚本、现场与剪辑扩大量产，并持续优化前三秒钩子、行动号召与促销表达。', '圍繞腳本、現場與剪輯擴大量產，並持續優化前三秒鈎子、行動號召與促銷表達。')}</p>
+            <button className="lichico-fastmoss lichico-local-hover" onClick={() => setActiveFile({ src: '/media/lichico/evidence/fastmoss-top13.jpg', label: 'FastMoss / Black Friday / Top 13' })}>
+              <img src="/media/lichico/evidence/fastmoss-top13.jpg" alt="FastMoss ranking crop showing LICHICO at number 13" />
+            </button>
+            <div className="lichico-result-pair"><div><strong>TOP 13</strong><span>ALL-CATEGORY GMV</span></div><div><strong>TOP 3</strong><span>US SPORTS CATEGORY</span></div></div>
+            <div className="lichico-tag-row"><i>CAMPAIGN SCRIPTS</i><i>A/B EDITS</i><i>CTA TESTING</i><i>ASSET PLANNING</i></div>
+          </article>
+
+          <article className="lichico-campaign-panel lichico-campaign-panel--ogr">
+            <span>02 / OGR</span>
+            <h3>OVERSEAS MARKET ENTRY</h3>
+            <p>{t(lang, 'OGR is a Belle Group sub-brand preparing to enter overseas markets. The work mapped the category, clarified product positioning and translated research into social and creator directions.', 'OGR 是百丽集团旗下准备进入海外市场的子品牌。本阶段梳理品类与价格带、明确产品定位，并把研究转化为社媒与达人内容方向。', 'OGR 是百麗集團旗下準備進入海外市場的子品牌。本階段梳理品類與價格帶、明確產品定位，並把研究轉化為社媒與達人內容方向。')}</p>
+            <div className="lichico-ogr-files">
+              <button className="lichico-local-hover" onClick={() => setActiveFile({ src: '/media/lichico/evidence/ogr-competitor-comparison.png', label: 'OGR / Competitor comparison' })}><img src="/media/lichico/evidence/ogr-competitor-comparison.png" alt="OGR competitor comparison" /><span>COMPETITOR + PRICE MAP ↗</span></button>
+              <button className="lichico-local-hover" onClick={() => setActiveFile({ src: '/media/lichico/evidence/ogr-creator-reference.png', label: 'OGR / Creator reference' })}><img src="/media/lichico/evidence/ogr-creator-reference.png" alt="OGR creator reference board" /><span>CREATOR REFERENCE ↗</span></button>
+            </div>
+            <div className="lichico-tag-row"><i>POSITIONING</i><i>SOCIAL STRATEGY</i><i>CREATOR REFERENCES</i><i>ACCOUNT PLANNING</i></div>
+          </article>
+        </div>
+
+        <div className="lichico-closing archive-reveal">
+          <div><span>REFLECTION</span><p>{project.reflection?.[lang]}</p></div>
+          <div><span>PROJECT NOTE</span><p>{lichicoAccountNote[lang]}</p></div>
+        </div>
       </div>
+
+      {activeFile && (
+        <div className="lichico-lightbox" role="dialog" aria-modal="true" aria-label={activeFile.label} onMouseDown={(event) => event.target === event.currentTarget && setActiveFile(null)}>
+          <div>
+            <ReturnIcon className="lichico-lightbox-close" onClick={() => setActiveFile(null)} label={t(lang, 'Close preview', '关闭预览', '關閉預覽')} />
+            <img src={activeFile.src} alt={activeFile.label} />
+            <span>{activeFile.label}</span>
+          </div>
+        </div>
+      )}
     </section>
   )
 }
@@ -1029,84 +927,15 @@ function ProjectDrawer({ project, lang, onClose }: { project: Project; lang: Lan
 }
 
 function ArchiveFooter({ lang }: { lang: Lang }) {
-  const footerRef = useRef<HTMLElement>(null)
-  const [activeTicket, setActiveTicket] = useState(0)
-  const ticketCount = 3
-
-  useGSAP((_, contextSafe) => {
-    if (!footerRef.current || !contextSafe) return
-    const cycle = contextSafe((direction: number) => {
-      setActiveTicket((current) => (current + direction + ticketCount) % ticketCount)
-    })
-    const observer = Observer.create({
-      target: footerRef.current,
-      type: 'wheel,touch,pointer',
-      tolerance: 28,
-      preventDefault: false,
-      onUp: () => cycle(1),
-      onLeft: () => cycle(1),
-      onDown: () => cycle(-1),
-      onRight: () => cycle(-1),
-    })
-    return () => observer.kill()
-  }, { scope: footerRef })
-
-  useGSAP(() => {
-    const tickets = gsap.utils.toArray<HTMLElement>('.contact-ticket')
-    tickets.forEach((ticket, index) => {
-      const relative = (index - activeTicket + tickets.length) % tickets.length
-      gsap.to(ticket, {
-        xPercent: relative === 0 ? 0 : relative === 1 ? 10 : -10,
-        y: relative === 0 ? 0 : relative === 1 ? 34 : 66,
-        rotation: relative === 0 ? 0 : relative === 1 ? 3.2 : -3.2,
-        scale: relative === 0 ? 1 : relative === 1 ? 0.94 : 0.88,
-        autoAlpha: relative === 0 ? 1 : relative === 1 ? 0.68 : 0.38,
-        zIndex: tickets.length - relative,
-        duration: 0.72,
-        ease: 'power3.inOut',
-        overwrite: 'auto',
-      })
-    })
-  }, { scope: footerRef, dependencies: [activeTicket], revertOnUpdate: false })
-
   return (
-    <footer className="archive-contact ticket-contact" ref={footerRef}>
-      <div className="ticket-contact-heading">
-        <span>CONTACT / AVAILABILITY / 2026</span>
-        <p>{t(lang, 'SCROLL · SWIPE · USE ARROWS', '滚动 · 滑动 · 使用箭头', '滾動 · 滑動 · 使用箭頭')}</p>
-      </div>
-      <div className="contact-ticket-stage">
-        <article className="contact-ticket contact-ticket--blue">
-          <div className="ticket-kicker"><span>OPEN FOR COLLABORATION</span><span>01 / 03</span></div>
-          <h2>{t(lang, 'Available for film, production and visual-content opportunities.', '期待电影、制片与视觉内容方向的合作机会。', '期待電影、製片與視覺內容方向的合作機會。')}</h2>
-          <a href="mailto:canlibx@outlook.com">canlibx@outlook.com ↗</a>
-          <div className="ticket-orbit" aria-hidden="true"><i /><i /><i /><i /><i /></div>
-        </article>
-        <article className="contact-ticket contact-ticket--yellow">
-          <div className="ticket-kicker"><span>HAZEL LI / 李瑭</span><span>02 / 03</span></div>
-          <h2>{t(lang, 'Creative Content Producer', '创意内容策划', '創意內容策劃')}</h2>
-          <div className="ticket-keywords">
-            <span>BRAND MARKETING</span>
-            <span>CONTENT STRATEGY</span>
-            <span>FILM PRODUCTION</span>
-            <span>VISUAL STORYTELLING</span>
-          </div>
-          <a href="mailto:canlibx@outlook.com">START A CONVERSATION ↗</a>
-        </article>
-        <article className="contact-ticket contact-ticket--paper">
-          <div className="ticket-kicker"><span>INDEX / LINKS</span><span>03 / 03</span></div>
-          <h2>{t(lang, 'Keep the archive moving.', '让档案继续生长。', '讓檔案繼續生長。')}</h2>
-          <nav>
-            <a href="/Tang_Li_Hazel_CV.docx" download>RÉSUMÉ ↓</a>
-            <a href="https://www.tiktok.com/@sunnystylemart" target="_blank" rel="noreferrer">TIKTOK ↗</a>
-            <a href="#top">{t(lang, 'BACK TO TOP ↑', '返回顶部 ↑', '返回頂部 ↑')}</a>
-          </nav>
-        </article>
-      </div>
-      <div className="ticket-contact-controls" aria-label={t(lang, 'Contact card controls', '联系卡片切换', '聯絡卡片切換')}>
-        <button onClick={() => setActiveTicket((activeTicket - 1 + ticketCount) % ticketCount)} aria-label={t(lang, 'Previous card', '上一张', '上一張')}>←</button>
-        <span>{String(activeTicket + 1).padStart(2, '0')} / 03</span>
-        <button onClick={() => setActiveTicket((activeTicket + 1) % ticketCount)} aria-label={t(lang, 'Next card', '下一张', '下一張')}>→</button>
+    <footer className="archive-contact">
+      <span>CONTACT / AVAILABILITY / 2026</span>
+      <h2>{t(lang, 'Available for film, production and visual-content opportunities.', '期待电影、制片与视觉内容方向的合作机会。', '期待電影、製片與視覺內容方向的合作機會。')}</h2>
+      <a href="mailto:canlibx@outlook.com">canlibx@outlook.com ↗</a>
+      <div>
+        <a href="/Tang_Li_Hazel_CV.docx" download>RÉSUMÉ ↓</a>
+        <a href="https://www.tiktok.com/@sunnystylemart" target="_blank" rel="noreferrer">TIKTOK ↗</a>
+        <a href="#top">{t(lang, 'BACK TO TOP ↑', '返回顶部 ↑', '返回頂部 ↑')}</a>
       </div>
     </footer>
   )
@@ -1126,7 +955,7 @@ function App() {
       <ArchiveNav lang={lang} setLang={setLang} />
       <ArchiveHero lang={lang} />
       <AboutArchive lang={lang} />
-      <LichicoOutcome lang={lang} onOpen={setProject} />
+      <LichicoOutcome lang={lang} />
       <FilmArchive lang={lang} onOpen={setProject} />
       <TheatreArchive lang={lang} onOpen={setProject} />
       <SkillsNetwork lang={lang} />

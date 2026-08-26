@@ -12,9 +12,9 @@ export const aboutMe = {
     '把一個想法從研究一路帶到最終發布。',
   ),
   introduction: local(
-    'Hazel Tang works across moving image, production, visual research and branded content. Her practice moves between narrative filmmaking, documentary observation, theatre production and data-informed short-form storytelling.',
-    'Hazel Tang 的实践横跨影像创作、制片、视觉研究与品牌内容，在剧情片、观察式纪录片、戏剧制作和数据驱动的短视频叙事之间流动。',
-    'Hazel Tang 的實踐橫跨影像創作、製片、視覺研究與品牌內容，在劇情片、觀察式紀錄片、戲劇製作和數據驅動的短視頻敘事之間流動。',
+    'Hazel Li works across moving image, production, visual research and branded content. Her practice moves between narrative filmmaking, documentary observation, theatre production and data-informed short-form storytelling.',
+    'Hazel Li（李瑭）的实践横跨影像创作、制片、视觉研究与品牌内容，在剧情片、观察式纪录片、戏剧制作和数据驱动的短视频叙事之间流动。',
+    'Hazel Li（李瑭）的實踐橫跨影像創作、製片、視覺研究與品牌內容，在劇情片、觀察式紀錄片、戲劇製作和數據驅動的短視頻敘事之間流動。',
   ),
   detail: local(
     'Rather than separating research from production, she treats each project as a connected process: finding the question, shaping the visual language, coordinating the work, and following the idea through to its final form.',
@@ -24,9 +24,9 @@ export const aboutMe = {
 }
 
 export const lichicoAccountNote = local(
-  "This project was produced during my internship at LICHICO. After the collaboration ended, the company retained ownership of the official account and later renamed it. The original account was published as LICHICO Official during my internship. The case study shown here focuses on my contribution to the creative strategy and production process rather than the account's current operation.",
-  '本项目完成于我在 LICHICO 实习期间。合作结束后，公司保留了官方账号的所有权并在之后更名；实习期间该账号以 LICHICO Official 名义发布。本案例聚焦于我对创意策略与制作流程的贡献，而非账号当前的运营状态。',
-  '本項目完成於我在 LICHICO 實習期間。合作結束後，公司保留了官方帳號的所有權並在之後更名；實習期間該帳號以 LICHICO Official 名義發布。本案例聚焦於我對創意策略與製作流程的貢獻，而非帳號當前的營運狀態。',
+  "This project was produced during my internship at JingQiYueDong, where I worked on the marketing and production of Lichico treadmills. After the collaboration ended, the company retained ownership of the official account and later renamed it. During my internship, the account operated as LICHICO OFFICIAL. This case study focuses on my contribution to the creative strategy and production process rather than the account's current operation.",
+  '本项目完成于我在竞启跃动实习期间，我负责 Lichico 跑步机的营销内容与制作。合作结束后，公司保留了官方账号的所有权并在之后更名；实习期间该账号以 LICHICO OFFICIAL 名义运营。本案例聚焦于我对创意策略与制作流程的贡献，而非账号当前的运营状态。',
+  '本項目完成於我在競啟躍動實習期間，我負責 Lichico 跑步機的營銷內容與製作。合作結束後，公司保留了官方帳號的所有權並在之後更名；實習期間該帳號以 LICHICO OFFICIAL 名義營運。本案例聚焦於我對創意策略與製作流程的貢獻，而非帳號當前的營運狀態。',
 )
 
 export type ProjectKind = 'film' | 'theatre' | 'commercial'
@@ -243,15 +243,14 @@ export const theatre: Project[] = [
 export const commercials: Project[] = [
   {
     id: 'lichico', kind: 'commercial', title: local('Lichico Global Content', 'Lichico 品牌出海内容', 'Lichico 品牌出海內容'), year: '2024–2025', featured: true, accent: '#7f5c43', platform: 'TikTok',
-    role: local('Creative Content Producer', '创意内容制作', '創意內容製作'),
-    summary: local('A strategy-to-production content system for LICHICO foldable walking pads in the US TikTok Shop market.', '为 LICHICO 折叠走步机进入美国 TikTok Shop 市场建立从策略到制作的内容系统。', '為 LICHICO 摺疊走步機進入美國 TikTok Shop 市場建立從策略到製作的內容系統。'),
+    role: local('Creative Content Producer (Intern)', '创意内容制作（实习）', '創意內容製作（實習）'),
+    summary: local('A strategy-to-production content system for Lichico foldable treadmills in the US TikTok Shop market.', '为 Lichico 折叠跑步机进入美国 TikTok Shop 市场建立从策略到制作的内容系统。', '為 Lichico 摺疊跑步機進入美國 TikTok Shop 市場建立從策略到製作的內容系統。'),
     responsibilities: local('Research, creative strategy, scripting, filming, editing and performance-led iteration.', '研究、创意策略、脚本、拍摄、剪辑与基于表现的快速迭代。', '研究、創意策略、腳本、拍攝、剪輯與基於表現的快速迭代。'),
     reflection: local('Research gave the work direction; production tested it; performance data determined what to refine next. The strongest outcome was a repeatable loop from insight to execution.', '研究为内容确定方向，制作负责验证，数据决定下一轮优化。最重要的成果，是建立了一个可以重复运行的“洞察—执行”闭环。', '研究為內容確定方向，製作負責驗證，數據決定下一輪優化。最重要的成果，是建立了一個可以重複運行的「洞察—執行」閉環。'),
     externalUrl: 'https://www.tiktok.com/@sunnystylemart',
     metrics: [
       { label: local('Videos delivered', '交付视频', '交付視頻'), value: '21' },
       { label: local('Organic exposure', '自然曝光', '自然曝光'), value: '200K+' },
-      { label: local('vs. industry conversion benchmark', '高于行业转化基准', '高於行業轉化基準'), value: '+30%' },
     ],
   },
   {
@@ -328,8 +327,8 @@ export const lichicoEvidence: LichicoEvidence[] = [
     title: local('Campaign Execution', '活动执行', '活動執行'),
     whatIDid: local('Scaled content production for seasonal campaigns while iterating creatives based on performance.', '为季节性活动扩大量产，并基于表现快速迭代创意。', '為季節性活動擴大量產，並基於表現快速迭代創意。'),
     items: [local('Black Friday campaign', '黑五活动', '黑五活動'), local('High-volume production', '高频内容生产', '高頻內容生產'), local('Rapid creative iteration', '快速创意迭代', '快速創意迭代'), local('Team campaign results', '团队活动成果', '團隊活動成果')],
-    image: '/media/lichico/evidence/lichico-full-script.png',
-    imageLabel: local('Bilingual script and direction notes', '双语脚本与导演备注', '雙語腳本與導演備註'),
+    image: '/media/lichico/evidence/fastmoss-black-friday-full.jpg',
+    imageLabel: local('Original FastMoss Black Friday ranking', 'FastMoss 黑五榜单原图', 'FastMoss 黑五榜單原圖'),
     reserved: [local('Publishing workflow', '发布流程', '發布流程'), local('Analytics review', '数据复盘', '數據複盤')],
   },
 ]

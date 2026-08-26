@@ -79,7 +79,7 @@ export default function FigmaSheet() {
         <p>AVAILABLE FOR COLLABORATION</p>
         <h2>Available for film production<br/>and visual content opportunities.</h2>
         <a href="mailto:canlibx@outlook.com">canlibx@outlook.com ↗</a>
-        <div><span>RÉSUMÉ ↓</span><span>TIKTOK ↗</span><span>HAZEL TANG · 2026</span></div>
+        <div><span>RÉSUMÉ ↓</span><span>TIKTOK ↗</span><span>HAZEL LI · 2026</span></div>
       </footer>
     </main>
   )

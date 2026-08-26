@@ -594,7 +594,7 @@ body::before {
 }
 
 /* ==========================================================================
-   Hazel Tang archive portfolio — 2026 redesign
+   Hazel Li archive portfolio — 2026 redesign
    Unique class names keep the optional ?figma reference sheet isolated.
    ========================================================================== */
 
@@ -1422,4 +1422,208 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .archive-page *,
   .archive-page *::before,
   .archive-page *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
+/* Restored editorial archive system. */
+:root {
+  --archive-display: "Syne", "Avenir Next", "Helvetica Neue", "PingFang SC", "PingFang TC", sans-serif;
+  --archive-serif: var(--archive-display);
+  --archive-sans: "Manrope", "Noto Sans SC", "Noto Sans TC", "PingFang SC", "PingFang TC", "Microsoft YaHei", sans-serif;
+  --archive-mono: "SFMono-Regular", "Roboto Mono", Consolas, "Liberation Mono", monospace;
+  --archive-dot-size: 3rem;
+  --archive-dot-color: rgba(21, 22, 19, .22);
+}
+.archive-page { font-family: var(--archive-sans); }
+.archive-identity span,
+.archive-hero-credit h1,
+.archive-hero-credit h2,
+.outcome-heading h2,
+.film-archive-heading h2,
+.theatre-heading h2,
+.skills-heading h2,
+.drawer-hero h2,
+.personal-archive-heading h2,
+.lichico-section-head h2,
+.lichico-capability-copy h3,
+.lichico-campaign-panel h3 { font-family: var(--archive-display); }
+.archive-section,
+.archive-contact { position: relative; isolation: isolate; overflow: hidden; }
+.archive-section::before,
+.archive-contact::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background-image: radial-gradient(var(--archive-dot-color) 5%, transparent 6%), radial-gradient(var(--archive-dot-color) 5%, transparent 6%);
+  background-position: 0 0, calc(var(--archive-dot-size) / 2) calc(var(--archive-dot-size) / 2);
+  background-size: var(--archive-dot-size) var(--archive-dot-size);
+  content: "";
+  opacity: .38;
+  pointer-events: none;
+}
+.archive-section > *,
+.archive-contact > * { position: relative; z-index: 1; }
+.film-production,
+.theatre-archive,
+.archive-contact { --archive-dot-color: rgba(244, 238, 226, .18); }
+.archive-hero-credit { width: min(880px, 70vw); }
+.archive-hero-credit h1 { font-weight: 500; font-size: clamp(66px, 9.4vw, 154px); line-height: .78; letter-spacing: -.075em; }
+.archive-hero-credit h2 { font-weight: 500; }
+
+/* Pinned personal archive with independently draggable cards. */
+.about-archive.personal-archive { min-height: 100svh; padding: 0; background-color: #f3f0e9; }
+.personal-archive .archive-section-label { z-index: 4; top: 96px; }
+.personal-archive-pin {
+  display: grid;
+  grid-template-columns: minmax(280px, .37fr) minmax(620px, 1fr);
+  gap: clamp(32px, 4vw, 72px);
+  align-items: center;
+  width: 100%;
+  min-height: 100svh;
+  padding: 120px clamp(24px, 5.3vw, 92px) 50px;
+}
+.personal-archive-heading { align-self: center; max-width: 480px; }
+.personal-archive-heading > span { color: var(--archive-red); font: 10px/1 var(--archive-mono); letter-spacing: .12em; }
+.personal-archive-heading h2 { margin: 28px 0 20px; font-size: clamp(42px, 4.3vw, 74px); font-weight: 500; line-height: .98; letter-spacing: -.055em; }
+.personal-archive-heading > p { color: var(--archive-muted); font: 9px/1.5 var(--archive-mono); letter-spacing: .08em; }
+.personal-card-stage { position: relative; width: 100%; min-width: 0; height: min(74svh, 760px); }
+.personal-card-motion { position: absolute; will-change: transform, opacity; }
+.personal-card {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  border: 1px solid rgba(25, 26, 23, .2);
+  background: #f7f3ea;
+  box-shadow: 0 18px 42px rgba(45, 39, 31, .16);
+  color: var(--archive-ink);
+  cursor: grab;
+  touch-action: none;
+  will-change: transform;
+}
+.personal-card:active { cursor: grabbing; }
+.personal-card > span,
+.personal-card figcaption,
+.personal-card cite { font: 9px/1.35 var(--archive-mono); font-style: normal; letter-spacing: .09em; text-transform: uppercase; }
+.personal-card--portrait { padding: 12px 12px 38px; }
+.personal-card--portrait img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 36%; filter: saturate(.72) contrast(1.03); }
+.personal-card--portrait figcaption { position: absolute; bottom: 14px; left: 14px; }
+.personal-paperclip { position: absolute; z-index: 3; top: -20px; right: 16%; width: 22px; height: 66px; border: 2px solid #6f6b64; border-radius: 13px; transform: rotate(7deg); }
+.personal-paperclip::after { position: absolute; top: 6px; left: 5px; width: 8px; height: 44px; border: 1.5px solid #6f6b64; border-radius: 8px; content: ""; }
+.personal-card--text { padding: clamp(22px, 2vw, 34px); }
+.personal-card--text h3 { margin: 18px 0 16px; font-family: var(--archive-display); font-size: clamp(20px, 1.65vw, 29px); font-weight: 600; line-height: 1.03; letter-spacing: -.035em; }
+.personal-card--text p { margin: 15px 0 0; font-size: clamp(12px, .88vw, 14px); line-height: 1.65; }
+.personal-card--about { background: #ece6d9; }
+.personal-card--blue { background: #b8d5eb; }
+.personal-card--yellow { background: #ecd967; }
+.personal-card--green { background: #3c756a; color: #f5efe4; }
+.personal-card--passport { padding: 26px; background: #263d58; color: #f2eee5; }
+.personal-card--passport dl { margin: 20px 0; }
+.personal-card--passport dl div { display: grid; grid-template-columns: 95px 1fr; gap: 12px; padding: 8px 0; border-top: 1px solid rgba(255, 255, 255, .2); }
+.personal-card--passport dt,
+.personal-card--passport dd { margin: 0; font-size: 11px; line-height: 1.35; }
+.personal-card--passport dd { text-align: right; }
+.personal-card--passport > p { margin: 10px 0 0; color: #c7d1dc; font-size: 10px; line-height: 1.45; }
+.personal-card--quote { padding: 28px; background: var(--archive-red); color: #f7eee2; }
+.personal-card--quote p { margin: 0 0 26px; font-family: var(--archive-display); font-size: clamp(16px, 1.25vw, 21px); font-weight: 500; line-height: 1.12; letter-spacing: -.025em; }
+.personal-card-motion--portrait { z-index: 5; top: 18%; left: 0; width: 25%; transform: rotate(-2.4deg); }
+.personal-card-motion--about { z-index: 4; top: 1%; left: 24%; width: 43%; transform: rotate(1.1deg); }
+.personal-card-motion--research { z-index: 7; top: 2%; right: 1%; width: 29%; transform: rotate(3deg); }
+.personal-card-motion--production { z-index: 8; bottom: 2%; left: 29%; width: 32%; transform: rotate(-2deg); }
+.personal-card-motion--culture { z-index: 6; top: 39%; right: 0; width: 34%; transform: rotate(1.6deg); }
+.personal-card-motion--language { z-index: 9; bottom: 1%; left: 0; width: 29%; transform: rotate(1.7deg); }
+.personal-card-motion--quote { z-index: 10; right: 17%; bottom: 3%; width: 34%; transform: rotate(-1.2deg); }
+.personal-card--zh { padding: clamp(26px, 2.5vw, 42px); }
+.personal-card--zh p { margin-top: 20px; font-size: clamp(14px, 1.05vw, 17px); line-height: 1.82; }
+.personal-card--zh-1 { background: #ece6d9; }
+.personal-card--zh-2 { background: #b8d5eb; }
+.personal-card--zh-3 { background: #ecd967; }
+.personal-card-motion--zh-1 { z-index: 4; top: 2%; left: 25%; width: 50%; transform: rotate(1.1deg); }
+.personal-card-motion--zh-2 { z-index: 7; top: 35%; right: 0; width: 44%; transform: rotate(2.4deg); }
+.personal-card-motion--zh-3 { z-index: 8; bottom: 0; left: 23%; width: 50%; transform: rotate(-1.8deg); }
+.personal-archive-footer { position: absolute; z-index: 5; right: clamp(24px, 5.3vw, 92px); bottom: 28px; left: clamp(24px, 5.3vw, 92px); display: flex; justify-content: space-between; gap: 20px; padding-top: 13px; border-top: 1px solid rgba(25, 26, 23, .24); color: var(--archive-muted); font: 8px/1 var(--archive-mono); letter-spacing: .1em; }
+.personal-archive-footer a { border-bottom: 1px solid; text-decoration: none; }
+
+/* Lichico refinements. */
+.lichico-account-link { font-size: 14px; letter-spacing: .08em; text-transform: uppercase; }
+.lichico-video-loading {
+  width: min(100%, 430px);
+  min-height: 16px;
+  margin: 8px auto 0;
+  color: var(--archive-muted);
+  font: 9px/1.45 var(--archive-mono);
+  letter-spacing: .035em;
+  transition: opacity .35s ease, visibility .35s ease;
+}
+.lichico-video-loading.is-ready { opacity: 0; visibility: hidden; }
+.lichico-capability-grid { perspective: 1200px; }
+.lichico-capability-card { opacity: .66; cursor: pointer; transition: opacity .35s ease, background-color .35s ease, border-color .35s ease; }
+.lichico-capability-card:hover,
+.lichico-capability-card:focus-visible,
+.lichico-capability-card.is-active { opacity: 1; background: rgba(247, 242, 232, .84); outline: none; }
+.lichico-capability-card.is-active { border-color: rgba(162, 46, 36, .58); }
+.lichico-capability-copy b { color: var(--archive-red); font-size: 12px; }
+.lichico-file-thumb img { object-fit: contain; background: #f7f2e9; }
+.lichico-takeaway-results { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--archive-line); border-left: 1px solid var(--archive-line); }
+.lichico-takeaway-results div { padding: 16px; border-right: 1px solid var(--archive-line); border-bottom: 1px solid var(--archive-line); }
+.lichico-takeaway-results strong { display: block; font: 600 24px/1 var(--archive-display); }
+.lichico-takeaway-results span { display: block; margin-top: 7px; color: var(--archive-muted); font: 8px/1.2 var(--archive-mono); }
+.lichico-bts-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.lichico-bts-card { min-height: 430px; }
+.lichico-bts-card img { transition: transform .65s cubic-bezier(.2,.8,.2,1), filter .45s ease; }
+.lichico-bts-card:hover img { transform: scale(1.035); filter: saturate(.9); }
+.lichico-campaign-grid { grid-template-columns: 1fr; }
+.lichico-campaign-panel { min-height: 0; }
+.lichico-campaign-panel--ogr { display: grid; grid-template-columns: minmax(260px, .75fr) minmax(520px, 1.25fr); gap: 26px 52px; }
+.lichico-campaign-panel--ogr > span,
+.lichico-campaign-panel--ogr h3,
+.lichico-campaign-panel--ogr > p,
+.lichico-campaign-panel--ogr .lichico-tag-row { grid-column: 1; }
+.lichico-campaign-panel--ogr .lichico-ogr-files { grid-column: 2; grid-row: 1 / span 5; }
+
+@media (max-width: 1100px) and (min-width: 901px) {
+  .personal-archive-pin { grid-template-columns: minmax(240px, .33fr) minmax(560px, 1fr); gap: 22px; }
+  .personal-archive-heading h2 { font-size: 47px; }
+  .personal-card-stage { height: min(69svh, 680px); }
+  .personal-card--text p { font-size: 11px; }
+}
+
+@media (max-width: 900px) {
+  .archive-hero-credit { width: 100%; }
+  .archive-hero-credit h1 { font-size: clamp(56px, 17vw, 92px); line-height: .84; }
+  .personal-archive { padding: 112px 20px 90px !important; }
+  .personal-archive .archive-section-label { display: none; }
+  .personal-archive-pin { display: block; min-height: 0; padding: 0; }
+  .personal-archive-heading { max-width: 620px; margin-bottom: 56px; }
+  .personal-archive-heading h2 { font-size: clamp(40px, 11vw, 64px); }
+  .personal-card-stage,
+  .personal-card-stage--zh { display: grid; grid-template-columns: 1fr; gap: 24px; height: auto; }
+  .personal-card-motion,
+  .personal-card-motion--portrait,
+  .personal-card-motion--about,
+  .personal-card-motion--research,
+  .personal-card-motion--production,
+  .personal-card-motion--culture,
+  .personal-card-motion--language,
+  .personal-card-motion--quote,
+  .personal-card-motion--zh-1,
+  .personal-card-motion--zh-2,
+  .personal-card-motion--zh-3 { position: relative; top: auto; right: auto; bottom: auto; left: auto; width: 100%; transform: none; }
+  .personal-card { touch-action: pan-y; }
+  .personal-card-motion--portrait { width: min(78%, 360px); margin: 0 auto 16px; }
+  .personal-card--text p,
+  .personal-card--zh p { font-size: 15px; }
+  .personal-archive-footer { position: relative; right: auto; bottom: auto; left: auto; flex-wrap: wrap; margin-top: 50px; }
+  .lichico-campaign-panel--ogr { display: block; }
+  .lichico-campaign-panel--ogr .lichico-ogr-files { margin-top: 28px; }
+}
+
+@media (max-width: 680px) {
+  .lichico-bts-grid { grid-template-columns: 1fr; }
+  .lichico-bts-card { min-height: 320px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .personal-card-motion,
+  .personal-card,
+  .lichico-capability-card,
+  .lichico-bts-card { will-change: auto; }
 }

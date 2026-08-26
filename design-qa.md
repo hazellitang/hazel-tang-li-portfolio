@@ -1,33 +1,34 @@
-# Lichico Case Study — Design QA
+# Design QA — Hazel Li Portfolio
 
 ## Scope
 
-- Updated only the Lichico project section.
-- Preserved the existing navigation, typography, global palette and page structure.
-- Reference visual language: `qa/reference-existing.png`.
-- Final desktop capture: `qa/implementation-desktop.png` at 1440 × 1000.
-- Side-by-side review: `qa/reference-vs-implementation.png`.
+- Restored the pinned, scroll-revealed and draggable About Me archive.
+- Preserved the existing hero and all unrequested portfolio sections.
+- Applied the requested Hazel Li / 李瑭 identity and editorial typography.
+- Updated only the specified Lichico case-study content and interactions.
 
-## Visual review
+## Visual comparison
 
-- The warm archive-paper palette, hairline rules, editorial serif headings and technical mono labels remain consistent with the existing portfolio.
-- The project now follows a three-part story: Project Overview, Working Files and Campaign Outcome.
-- Working files are limited to four high-value artifacts, with authentic source-document texture retained.
-- The Black Friday and OGR outcomes use an equal two-column composition on desktop and a readable single-column sequence on mobile.
-- Poster crops, local videos and BTS images preserve their intended aspect ratios without stretching.
+- Reference: `/Users/itspocket/Desktop/截屏2026-08-25 23.30.08.png`
+- Implementation capture: `/private/tmp/hazel-about-implementation.png`
+- Combined comparison: `/private/tmp/hazel-about-qa-combined.jpg`
+- Desktop viewport: 1440 × 900
+- Mobile viewport: 390 × 844
 
-## Interaction review
+The restored About Me composition matches the reference direction: dotted paper field, large geometric headline, overlapping archive cards, blue/yellow/green/red accents, technical mono labels and photographic field-note card.
 
-- Six local HTML5 videos switch correctly; the selected video loads with `readyState: 4` and no media error.
-- Evidence and BTS images open and close in the lightbox.
-- GSAP hover behavior is scoped to the Lichico evidence and BTS cards and cleans up on unmount.
-- Desktop and 390 px mobile layouts report no horizontal overflow.
-- Section anchors account for the fixed header.
+## Interaction checks
 
-## Build verification
+- Hero entrance animation completed without console errors.
+- About Me pins and reveals seven archive cards while scrolling.
+- Draggable bindings are active on every About Me card.
+- Mobile About Me stacks cleanly without horizontal overflow.
+- Lichico local video reached `readyState: 4`; the loading note became hidden after media readiness.
+- Lichico takeaway cards change active state on interaction.
+- Campaign Execution uses the full original FastMoss image.
+- Behind the Scenes contains two selected images and the confidentiality note.
+- Reflection and Project Note are absent from the closing screen.
+- Desktop and mobile layouts have no horizontal overflow.
+- Production build passes.
 
-- TypeScript project build: passed.
-- Vite production build: passed.
-- Final bundle: CSS 82.55 kB; JavaScript 380.43 kB before gzip.
-
-passed
+final result: passed

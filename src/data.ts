@@ -13,8 +13,8 @@ export const aboutMe = {
   ),
   introduction: local(
     'Hazel Li works across moving image, production, visual research and branded content. Her practice moves between narrative filmmaking, documentary observation, theatre production and data-informed short-form storytelling.',
-    'Hazel Li（李瑭）的实践横跨影像创作、制片、视觉研究与品牌内容，在剧情片、观察式纪录片、戏剧制作和数据驱动的短视频叙事之间流动。',
-    'Hazel Li（李瑭）的實踐橫跨影像創作、製片、視覺研究與品牌內容，在劇情片、觀察式紀錄片、戲劇製作和數據驅動的短視頻敘事之間流動。',
+    '李瑭（Hazel）的实践横跨影像创作、制片、视觉研究与品牌内容，在剧情片、观察式纪录片、戏剧制作和数据驱动的短视频叙事之间流动。',
+    '李瑭（Hazel）的實踐橫跨影像創作、製片、視覺研究與品牌內容，在劇情片、觀察式紀錄片、戲劇製作和數據驅動的短視頻敘事之間流動。',
   ),
   detail: local(
     'Rather than separating research from production, she treats each project as a connected process: finding the question, shaping the visual language, coordinating the work, and following the idea through to its final form.',
@@ -245,7 +245,7 @@ export const commercials: Project[] = [
     id: 'lichico', kind: 'commercial', title: local('Lichico Global Content', 'Lichico 品牌出海内容', 'Lichico 品牌出海內容'), year: '2024–2025', featured: true, accent: '#7f5c43', platform: 'TikTok',
     role: local('Creative Content Producer (Intern)', '创意内容制作（实习）', '創意內容製作（實習）'),
     summary: local('A strategy-to-production content system for Lichico foldable treadmills in the US TikTok Shop market.', '为 Lichico 折叠跑步机进入美国 TikTok Shop 市场建立从策略到制作的内容系统。', '為 Lichico 摺疊跑步機進入美國 TikTok Shop 市場建立從策略到製作的內容系統。'),
-    responsibilities: local('Research, creative strategy, scripting, filming, editing and performance-led iteration.', '研究、创意策略、脚本、拍摄、剪辑与基于表现的快速迭代。', '研究、創意策略、腳本、拍攝、剪輯與基於表現的快速迭代。'),
+    responsibilities: local('Research, creative strategy, scripting, filming, editing, publishing copy and performance-led iteration. I scripted 21 creative videos that each surpassed 10K views, compared with the account’s typical 1K–2K baseline.', '研究、创意策略、脚本、拍摄、剪辑、发布文案与基于表现的快速迭代。我为 21 条创意视频编写脚本，每条播放量均超过 10K，而该账号常规内容通常为 1K–2K。', '研究、創意策略、腳本、拍攝、剪輯、發布文案與基於表現的快速迭代。我為 21 條創意視頻編寫腳本，每條播放量均超過 10K，而該帳號常規內容通常為 1K–2K。'),
     reflection: local('Research gave the work direction; production tested it; performance data determined what to refine next. The strongest outcome was a repeatable loop from insight to execution.', '研究为内容确定方向，制作负责验证，数据决定下一轮优化。最重要的成果，是建立了一个可以重复运行的“洞察—执行”闭环。', '研究為內容確定方向，製作負責驗證，數據決定下一輪優化。最重要的成果，是建立了一個可以重複運行的「洞察—執行」閉環。'),
     externalUrl: 'https://www.tiktok.com/@sunnystylemart',
     metrics: [
@@ -291,6 +291,9 @@ export interface LichicoEvidence {
   items: Localized[]
   image: string
   imageLabel: Localized
+  secondaryImage?: string
+  secondaryImageLabel?: Localized
+  detail?: Localized
   reserved: Localized[]
 }
 
@@ -307,17 +310,19 @@ export const lichicoEvidence: LichicoEvidence[] = [
   {
     id: 'creative-strategy',
     title: local('Creative Strategy', '创意策略', '創意策略'),
-    whatIDid: local('Translated product features into platform-native storytelling and creator frameworks.', '把产品卖点转化为符合平台语境的叙事与达人框架。', '把產品賣點轉化為符合平台語境的敘事與達人框架。'),
+    whatIDid: local('Translated product features into platform-native storytelling, creator frameworks and timely remakes of 2024–2025 TikTok trends.', '把产品卖点转化为符合平台语境的叙事、达人框架，并结合 2024–2025 TikTok 热点进行及时翻拍，持续训练平台网感。', '把產品賣點轉化為符合平台語境的敘事、達人框架，並結合 2024–2025 TikTok 熱點進行及時翻拍，持續訓練平台網感。'),
     items: [local('Creator reference board', '达人参考板', '達人參考板'), local('Content framework', '内容框架', '內容框架'), local('Video planning', '视频策划', '視頻策劃'), local('Story structure', '叙事结构', '敘事結構')],
     image: '/media/lichico/evidence/lichico-video-structure.png',
     imageLabel: local('Creative insights of video structure', '视频结构创意洞察', '視頻結構創意洞察'),
+    secondaryImage: '/media/lichico/evidence/lichico-trend-structure.png',
+    secondaryImageLabel: local('Trend-led structure and reference review', '热点趋势结构与参考复盘', '熱點趨勢結構與參考復盤'),
     reserved: [local('Storyboard', '故事板', '故事板'), local('Content matrix', '内容矩阵', '內容矩陣')],
   },
   {
     id: 'production',
     title: local('Production', '制作执行', '製作執行'),
-    whatIDid: local('Planned and produced short-form videos from scripting to final edit.', '从脚本到成片，规划并制作短视频内容。', '從腳本到成片，規劃並製作短視頻內容。'),
-    items: [local('Shot list', '镜头清单', '鏡頭清單'), local('Camera planning', '机位规划', '機位規劃'), local('Filming workflow', '拍摄流程', '拍攝流程'), local('Editing', '剪辑', '剪輯')],
+    whatIDid: local('Planned and produced short-form videos from scripting and publishing copy to the final edit.', '从脚本、发布文案到最终剪辑，规划并制作短视频内容。', '從腳本、發布文案到最終剪輯，規劃並製作短視頻內容。'),
+    items: [local('Shot list', '镜头清单', '鏡頭清單'), local('Camera planning', '机位规划', '機位規劃'), local('Filming workflow', '拍摄流程', '拍攝流程'), local('Editing & publishing copy', '剪辑与发布文案', '剪輯與發布文案')],
     image: '/media/lichico/evidence/lichico-shot-list.png',
     imageLabel: local('Product-proof shot list', '卖点证明镜头表', '賣點證明鏡頭表'),
     reserved: [local('Monitor records', '监看记录', '監看記錄'), local('Lighting setup', '灯光方案', '燈光方案')],
@@ -329,6 +334,7 @@ export const lichicoEvidence: LichicoEvidence[] = [
     items: [local('Black Friday campaign', '黑五活动', '黑五活動'), local('High-volume production', '高频内容生产', '高頻內容生產'), local('Rapid creative iteration', '快速创意迭代', '快速創意迭代'), local('Team campaign results', '团队活动成果', '團隊活動成果')],
     image: '/media/lichico/evidence/fastmoss-black-friday-full.jpg',
     imageLabel: local('Original FastMoss Black Friday ranking', 'FastMoss 黑五榜单原图', 'FastMoss 黑五榜單原圖'),
+    detail: local('Through continuous A/B testing, we analysed high-performing videos and historical data to identify recurring keywords and creative elements. We repeatedly validated which messages strengthened trust and conversion among international retail consumers, turning consumer insights and trust signals into a repeatable optimisation loop.', '通过持续的 A/B 测试，我们分析高表现视频与历史数据，归纳高频关键词和创意元素，并反复验证哪些信息最能赢得海外零售消费者的信任与青睐、促进转化，从而把消费者洞察与信任信号沉淀为可复用的优化循环。', '通過持續的 A/B 測試，我們分析高表現視頻與歷史數據，歸納高頻關鍵詞和創意元素，並反覆驗證哪些信息最能贏得海外零售消費者的信任與青睞、促進轉化，從而把消費者洞察與信任信號沉澱為可復用的優化循環。'),
     reserved: [local('Publishing workflow', '发布流程', '發布流程'), local('Analytics review', '数据复盘', '數據複盤')],
   },
 ]

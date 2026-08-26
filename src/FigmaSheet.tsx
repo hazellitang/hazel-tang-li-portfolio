@@ -11,10 +11,10 @@ export default function FigmaSheet() {
   return (
     <main className="figma-sheet">
       <section className="fs-hero">
-        <div className="fs-nav"><b>HT</b><span>SELECTED WORK&nbsp;&nbsp;&nbsp; PROFILE&nbsp;&nbsp;&nbsp; CONTACT</span><i>EN · 简 · 繁</i></div>
+        <div className="fs-nav"><b>HL</b><span>SELECTED WORK&nbsp;&nbsp;&nbsp; PROFILE&nbsp;&nbsp;&nbsp; CONTACT</span><i>EN · 简 · 繁</i></div>
         <div className="fs-hero-art"><i/><i/><i/></div>
         <p className="fs-overline">HONG KONG · LONDON · SHENZHEN</p>
-        <h1>Hazel<br/>Tang</h1>
+        <h1>Hazel<br/>Li</h1>
         <h2>MOVING IMAGE · PRODUCTION · VISUAL STORYTELLING</h2>
         <div className="fs-hero-foot"><span>01 — 08</span><span>PORTFOLIO / 2026</span><span>canlibx@outlook.com ↗</span></div>
       </section>

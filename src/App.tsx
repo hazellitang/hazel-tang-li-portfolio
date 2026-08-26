@@ -1,4 +1,4 @@
-import { CSSProperties, RefObject, useEffect, useRef, useState } from 'react'
+import { CSSProperties, ReactNode, RefObject, useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Draggable } from 'gsap/Draggable'
@@ -235,6 +235,10 @@ function ReturnIcon({
   )
 }
 
+function Marker({ children, tone = 'yellow' }: { children: ReactNode; tone?: 'yellow' | 'pink' | 'blue' }) {
+  return <mark className={`text-marker text-marker--${tone}`}>{children}</mark>
+}
+
 function ArchiveNav({ lang, setLang }: { lang: Lang; setLang: (lang: Lang) => void }) {
   const [open, setOpen] = useState(false)
   const items = [
@@ -248,7 +252,7 @@ function ArchiveNav({ lang, setLang }: { lang: Lang; setLang: (lang: Lang) => vo
   return (
     <header className="archive-nav">
       <a className="archive-identity" href="#top" aria-label="Hazel Li, back to top">
-        <span>HAZEL LI</span>
+        <span>{lang === 'en' ? 'HAZEL LI' : '李瑭（Hazel）'}</span>
         <small>MOVING IMAGE ARCHIVE</small>
       </a>
       <button
@@ -288,7 +292,7 @@ function ArchiveHero({ lang }: { lang: Lang }) {
       </div>
       <div className="archive-hero-credit">
         <p>{t(lang, 'A moving-image maker and production researcher', '影像创作者与制作研究者', '影像創作者與製作研究者')}</p>
-        <h1>Hazel Li</h1>
+        <h1>{lang === 'en' ? 'Hazel Li' : '李瑭（Hazel）'}</h1>
         <h2>{t(lang, 'Moving image / Production / Visual research', '影像／制作／视觉研究', '影像／製作／視覺研究')}</h2>
       </div>
       <div className="archive-hero-note">
@@ -433,7 +437,7 @@ function AboutArchive({ lang }: { lang: Lang }) {
           <h2>
             {isEnglish
               ? <>A Creative Content Producer<br />bridging research,<br />strategy and production.</>
-              : '关于我'}
+              : <>连接研究、策略与制作的<br />创意内容制作人。</>}
           </h2>
           <p>{isEnglish ? 'SCROLL TO OPEN THE ARCHIVE · DRAG ANY CARD' : '滚动展开档案 · 卡片可自由拖动'}</p>
         </header>
@@ -443,7 +447,7 @@ function AboutArchive({ lang }: { lang: Lang }) {
             <figure className="personal-card personal-card--portrait">
               <span className="personal-paperclip" aria-hidden="true" />
               <img src="/media/profile/hazel-profile.jpg" alt={t(lang, 'Hazel Li in front of illuminated lanterns', '李瑭站在点亮的灯笼前', '李瑭站在點亮的燈籠前')} />
-              <figcaption>HAZEL LI / FIELD NOTE 01</figcaption>
+              <figcaption>{isEnglish ? 'HAZEL LI / FIELD NOTE 01' : `${t(lang, 'Hazel Li', '李瑭（Hazel）', '李瑭（Hazel）')} / FIELD NOTE 01`}</figcaption>
             </figure>
           </div>
 
@@ -452,29 +456,29 @@ function AboutArchive({ lang }: { lang: Lang }) {
               <div className="personal-card-motion personal-card-motion--about">
                 <article className="personal-card personal-card--text personal-card--about">
                   <span>ABOUT</span>
-                  <p>I am a creative content producer working across brand storytelling, short-form content, film production and documentary practice, with a BA in Media from UCL.</p>
-                  <p>Now studying Media, Culture and Creative Cities at HKU, I combine audience research, visual storytelling and production management to transform ideas into meaningful content.</p>
+                  <p>I am a creative content producer working across <Marker>brand storytelling</Marker>, short-form content, film production and documentary practice, with a <Marker tone="pink">UCL BA Media</Marker> degree.</p>
+                  <p>Now studying <Marker tone="blue">HKU MCCC</Marker>, I combine audience research, visual storytelling and production management to transform ideas into meaningful content.</p>
                 </article>
               </div>
               <div className="personal-card-motion personal-card-motion--research">
                 <article className="personal-card personal-card--text personal-card--blue">
                   <span>WHAT I BRING / 01</span>
                   <h3>Research-driven storytelling</h3>
-                  <p>I use audience insights, cultural observation and market research to discover meaningful stories and develop content strategies.</p>
+                  <p>I use <Marker>audience insights</Marker>, cultural observation and market research to discover meaningful stories and develop content strategies.</p>
                 </article>
               </div>
               <div className="personal-card-motion personal-card-motion--production">
                 <article className="personal-card personal-card--text personal-card--yellow">
                   <span>WHAT I BRING / 02</span>
                   <h3>End-to-end production</h3>
-                  <p>From concept development and scripting<br />to directing, coordination and final delivery.</p>
+                  <p>From <Marker tone="pink">concept development and scripting</Marker><br />to directing, coordination and final delivery.</p>
                 </article>
               </div>
               <div className="personal-card-motion personal-card-motion--culture">
                 <article className="personal-card personal-card--text personal-card--green">
                   <span>WHAT I BRING / 03</span>
                   <h3>Cross-cultural communication</h3>
-                  <p>Working across Hong Kong, Mainland China and international environments, I communicate across Mandarin, Cantonese and English-speaking contexts.</p>
+                  <p>Working across <Marker tone="blue">Hong Kong, Mainland China and international environments</Marker>, I communicate across Mandarin, Cantonese and English-speaking contexts.</p>
                 </article>
               </div>
               <div className="personal-card-motion personal-card-motion--language">
@@ -498,20 +502,56 @@ function AboutArchive({ lang }: { lang: Lang }) {
             </>
           ) : (
             <>
-              {[
-                '我是一位连接研究、策略与制作的创意内容制作人。本科阶段在 UCL 学习影视制作与媒体研究，让我建立了视觉叙事与内容制作能力；随后在港大媒体、文化与创意城市方向的学习中，我进一步通过社会学视角、定性研究和受众分析理解内容背后的文化语境与用户行为逻辑。',
-                '在商业内容实践中，我曾参与网易有道短视频运营及易健子品牌 Lichico 的 TikTok 品牌出海内容策略，从用户研究、竞品分析到脚本创作和视频制作，探索如何将洞察转化为具有传播力的内容。',
-                '我认为好内容的前提是理解受众——他们是谁，在什么场景看，什么东西能真正留住他们。学术训练给了我研究能力，制作经验让我能亲手把洞察落地成片。',
-              ].map((paragraph, index) => (
-                <div className={`personal-card-motion personal-card-motion--zh-${index + 1}`} key={paragraph}>
-                  <article className={`personal-card personal-card--text personal-card--zh personal-card--zh-${index + 1}`}>
-                    <span>{String(index + 1).padStart(2, '0')} / 03</span>
-                    <p>{paragraph}</p>
-                  </article>
-                </div>
-              ))}
+              <div className="personal-card-motion personal-card-motion--zh-1">
+                <article className="personal-card personal-card--text personal-card--zh personal-card--zh-1">
+                  <span>01 / ABOUT</span>
+                  <p>我是一位连接研究、策略与制作的创意内容制作人。本科阶段在 <Marker tone="pink">UCL BA Media</Marker> 学习影视制作与媒体研究，让我建立了视觉叙事与内容制作能力；随后在 <Marker tone="blue">HKU MCCC</Marker> 的学习中，我进一步通过社会学视角、定性研究和受众分析理解内容背后的文化语境与用户行为逻辑。</p>
+                </article>
+              </div>
+              <div className="personal-card-motion personal-card-motion--zh-2">
+                <article className="personal-card personal-card--text personal-card--zh personal-card--zh-2">
+                  <span>02 / PRACTICE</span>
+                  <p>在商业内容实践中，我曾参与网易有道短视频运营及 Lichico 的 TikTok 品牌出海内容策略，从<Marker>用户研究、竞品分析</Marker>到脚本创作和视频制作，探索如何将洞察转化为具有传播力的内容。</p>
+                </article>
+              </div>
+              <div className="personal-card-motion personal-card-motion--zh-3">
+                <article className="personal-card personal-card--text personal-card--zh personal-card--zh-3">
+                  <span>03 / APPROACH</span>
+                  <p>我认为好内容的前提是<Marker tone="pink">理解受众</Marker>——他们是谁，在什么场景看，什么东西能真正留住他们。学术训练给了我研究能力，制作经验让我能亲手把洞察落地成片。</p>
+                </article>
+              </div>
+              <div className="personal-card-motion personal-card-motion--zh-research">
+                <article className="personal-card personal-card--text personal-card--blue">
+                  <span>WHAT I BRING / 01</span><h3>{lang === 'zh' ? '研究驱动的叙事' : '研究驅動的敘事'}</h3>
+                  <p>{lang === 'zh' ? '运用受众洞察、文化观察和市场研究发现有意义的故事，并发展内容策略。' : '運用受眾洞察、文化觀察和市場研究發現有意義的故事，並發展內容策略。'}</p>
+                </article>
+              </div>
+              <div className="personal-card-motion personal-card-motion--zh-production">
+                <article className="personal-card personal-card--text personal-card--yellow">
+                  <span>WHAT I BRING / 02</span><h3>{lang === 'zh' ? '端到端制作' : '端到端製作'}</h3>
+                  <p>{lang === 'zh' ? '从概念发展与脚本，到导演、协调和最终交付。' : '從概念發展與腳本，到導演、協調和最終交付。'}</p>
+                </article>
+              </div>
+              <div className="personal-card-motion personal-card-motion--zh-culture">
+                <article className="personal-card personal-card--text personal-card--green">
+                  <span>WHAT I BRING / 03</span><h3>{lang === 'zh' ? '跨文化沟通' : '跨文化溝通'}</h3>
+                  <p>{lang === 'zh' ? '在香港、内地与国际环境中工作，能在普通话、粤语与英语语境之间准确沟通。' : '在香港、內地與國際環境中工作，能在普通話、粵語與英語語境之間準確溝通。'}</p>
+                </article>
+              </div>
+              <div className="personal-card-motion personal-card-motion--zh-language">
+                <aside className="personal-card personal-card--passport">
+                  <span>{lang === 'zh' ? '语言' : '語言'}</span>
+                  <dl>
+                    <div><dt>{lang === 'zh' ? '普通话' : '普通話'}</dt><dd>{lang === 'zh' ? '母语' : '母語'}</dd></div>
+                    <div><dt>{lang === 'zh' ? '粤语' : '粵語'}</dt><dd>{lang === 'zh' ? '母语' : '母語'}</dd></div>
+                    <div><dt>{lang === 'zh' ? '英语' : '英語'}</dt><dd>{lang === 'zh' ? '专业工作水平' : '專業工作水平'}</dd></div>
+                  </dl>
+                  <p>{lang === 'zh' ? '现居香港 · 经历横跨香港、深圳与伦敦' : '現居香港 · 經歷橫跨香港、深圳與倫敦'}</p>
+                </aside>
+              </div>
             </>
           )}
+          <img className="personal-highlighters" src="/media/about/highlighter-pens.png" alt="" aria-hidden="true" />
         </div>
 
         <footer className="personal-archive-footer">
@@ -537,6 +577,7 @@ function LichicoOutcome({ lang }: { lang: Lang }) {
   const [activeTakeaway, setActiveTakeaway] = useState(0)
   const [videoLoading, setVideoLoading] = useState(true)
   const [activeFile, setActiveFile] = useState<{ src: string; label: string } | null>(null)
+  const [flippedOgr, setFlippedOgr] = useState<number | null>(null)
   const project = commercials[0]
   const active = lichicoHighlights[activeIndex]
 
@@ -563,6 +604,12 @@ function LichicoOutcome({ lang }: { lang: Lang }) {
       { scale: 0.985, y: 12 },
       { scale: 1, y: 0, duration: 0.55, ease: 'power3.out', overwrite: 'auto' },
     )
+    gsap.to('.ogr-flip-card .ogr-flip-inner', {
+      rotationY: (index) => flippedOgr === index ? 180 : 0,
+      duration: 0.72,
+      ease: 'power3.inOut',
+      overwrite: 'auto',
+    })
     gsap.fromTo(
       '.lichico-bts-card',
       { y: 28, rotate: (index) => index === 0 ? -1.4 : 1.4, autoAlpha: 0 },
@@ -588,7 +635,7 @@ function LichicoOutcome({ lang }: { lang: Lang }) {
       })
     })
     return () => cleanups.forEach((cleanup) => cleanup())
-  }, { scope: sectionRef, dependencies: [activeIndex, activeTakeaway], revertOnUpdate: true })
+  }, { scope: sectionRef, dependencies: [activeIndex, activeTakeaway, flippedOgr], revertOnUpdate: true })
 
   const bts = [
     { src: '/media/lichico/bts/studio-lighting.jpg', label: t(lang, 'Studio lighting', '棚拍灯光', '棚拍燈光') },
@@ -646,7 +693,8 @@ function LichicoOutcome({ lang }: { lang: Lang }) {
                 onPlaying={() => setVideoLoading(false)}
               />
             </div>
-            <div className="lichico-video-caption"><span>{active.descriptor[lang]}</span><b>{active.views}</b></div>
+            <div className="lichico-video-caption"><span>{active.descriptor[lang]}</span><b>{active.views === 'LOCAL MASTER' ? active.views : `${active.views} views`}</b></div>
+            <p className="lichico-view-date">{t(lang, 'View counts as of 2026-08-26.', '播放量统计截至 2026 年 8 月 26 日。', '播放量統計截至 2026 年 8 月 26 日。')}</p>
             <p className={`lichico-video-loading ${videoLoading ? '' : 'is-ready'}`}>{t(lang, 'Thank you for your patience while the videos load ☺', '感谢耐心等待视频加载 ☺', '感謝耐心等待視頻載入 ☺')}</p>
           </div>
 
@@ -655,7 +703,7 @@ function LichicoOutcome({ lang }: { lang: Lang }) {
               <button key={video.id} className={index === activeIndex ? 'active' : ''} onClick={() => setActiveIndex(index)}>
                 <div><img src={video.poster} alt="" /></div>
                 <span>{video.descriptor[lang]}</span>
-                <b>PUBLIC VIEW / {video.views}</b>
+                <b>{video.views === 'LOCAL MASTER' ? video.views : `${video.views} views`}</b>
               </button>
             ))}
           </div>
@@ -674,6 +722,7 @@ function LichicoOutcome({ lang }: { lang: Lang }) {
             <article
               className={`lichico-capability-card lichico-local-hover archive-reveal ${activeTakeaway === index ? 'is-active' : ''}`}
               key={capability.id}
+              data-id={capability.id}
               role="button"
               tabIndex={0}
               aria-pressed={activeTakeaway === index}
@@ -687,10 +736,29 @@ function LichicoOutcome({ lang }: { lang: Lang }) {
                 <p>{capability.whatIDid[lang]}</p>
                 <ul>{capability.items.map((item) => <li key={item.en}>{item[lang]}</li>)}</ul>
               </div>
-              <button className="lichico-file-thumb" onClick={(event) => { event.stopPropagation(); setActiveFile({ src: capability.id === 'campaign-execution' ? '/media/lichico/evidence/fastmoss-black-friday-full.jpg' : capability.image, label: capability.imageLabel[lang] }) }}>
-                <img src={capability.id === 'campaign-execution' ? '/media/lichico/evidence/fastmoss-black-friday-full.jpg' : capability.image} alt={capability.imageLabel[lang]} />
-                <span>{capability.imageLabel[lang]} ↗</span>
-              </button>
+              <div className={`lichico-file-stack ${capability.secondaryImage ? 'lichico-file-stack--double' : ''}`}>
+                <button className="lichico-file-thumb" onClick={(event) => { event.stopPropagation(); setActiveFile({ src: capability.image, label: capability.imageLabel[lang] }) }}>
+                  <img src={capability.image} alt={capability.imageLabel[lang]} />
+                  <span>{capability.imageLabel[lang]} ↗</span>
+                </button>
+                {capability.secondaryImage && capability.secondaryImageLabel && (
+                  <button className="lichico-file-thumb" onClick={(event) => { event.stopPropagation(); setActiveFile({ src: capability.secondaryImage!, label: capability.secondaryImageLabel![lang] }) }}>
+                    <img src={capability.secondaryImage} alt={capability.secondaryImageLabel[lang]} />
+                    <span>{capability.secondaryImageLabel[lang]} ↗</span>
+                  </button>
+                )}
+              </div>
+              {capability.detail && (
+                <p className="lichico-capability-detail">
+                  {lang === 'en' ? (
+                    <>Through continuous <Marker>A/B testing</Marker>, we analysed high-performing videos and historical data to identify <Marker tone="pink">recurring keywords</Marker> and creative elements. We repeatedly validated which messages strengthened trust and conversion among international retail consumers, turning <Marker tone="blue">consumer insights</Marker> and <Marker>trust signals</Marker> into a repeatable optimisation loop.</>
+                  ) : lang === 'zh' ? (
+                    <>通过持续的 <Marker>A/B 测试</Marker>，我们分析高表现视频与历史数据，归纳出反复出现的 <Marker tone="pink">高频词和创意元素</Marker>；再持续验证哪些表达最能获得海外零售消费者的青睐、建立信任并促进转化，最终把 <Marker tone="blue">消费者洞察</Marker> 与 <Marker>信任信号</Marker> 沉淀为可复用的内容优化方法。</>
+                  ) : (
+                    <>透過持續的 <Marker>A/B 測試</Marker>，我們分析高表現影片與歷史數據，歸納出反覆出現的 <Marker tone="pink">高頻詞和創意元素</Marker>；再持續驗證哪些表達最能獲得海外零售消費者的青睞、建立信任並促進轉化，最終把 <Marker tone="blue">消費者洞察</Marker> 與 <Marker>信任信號</Marker> 沉澱為可複用的內容優化方法。</>
+                  )}
+                </p>
+              )}
               {capability.id === 'campaign-execution' && (
                 <div className="lichico-takeaway-results">
                   <div><strong>TOP 13</strong><span>ALL-CATEGORY GMV</span></div>
@@ -720,19 +788,29 @@ function LichicoOutcome({ lang }: { lang: Lang }) {
         <div className="lichico-section-head archive-reveal">
           <span>03 / OGR MARKET RESEARCH</span>
           <h2>{t(lang, 'From category research to market-entry direction.', '从品类研究到出海内容方向。', '從品類研究到出海內容方向。')}</h2>
-          <p>{t(lang, 'The Lichico campaign result now sits inside the main takeaways above.', 'Lichico 的活动成果已合并至上方核心收获。', 'Lichico 的活動成果已合併至上方核心收穫。')}</p>
+          <p>{t(lang, 'An early-stage 0→1 market-entry study that translated category research into a practical positioning, slogan system and creator brief before launch.', '这是一次早期 0→1 的出海研究：在上线前把品类洞察转化为可执行的定位、口号体系与达人内容简报。', '這是一次早期 0→1 的出海研究：在上線前把品類洞察轉化為可執行的定位、口號體系與達人內容簡報。')}</p>
         </div>
 
         <div className="lichico-campaign-grid archive-reveal">
           <article className="lichico-campaign-panel lichico-campaign-panel--ogr">
             <span>01 / OGR</span>
             <h3>OVERSEAS MARKET ENTRY</h3>
-            <p>{t(lang, 'OGR is a Belle Group sub-brand preparing to enter overseas markets. The work mapped the category, clarified product positioning and translated research into social and creator directions.', 'OGR 是百丽集团旗下准备进入海外市场的子品牌。本阶段梳理品类与价格带、明确产品定位，并把研究转化为社媒与达人内容方向。', 'OGR 是百麗集團旗下準備進入海外市場的子品牌。本階段梳理品類與價格帶、明確產品定位，並把研究轉化為社媒與達人內容方向。')}</p>
+            <p>{t(lang, 'OGR is a Belle Group sub-brand preparing to enter overseas markets. I helped shape its early 0→1 market-entry foundation—mapping the category, clarifying product positioning, developing a slogan direction and translating research into social and creator briefs before the short collaboration concluded.', 'OGR 是百丽集团旗下准备进入海外市场的子品牌。我参与搭建其早期 0→1 出海基础：梳理品类、明确产品定位、发展口号方向，并在短期合作结束前把研究转化为社媒与达人简报。', 'OGR 是百麗集團旗下準備進入海外市場的子品牌。我參與搭建其早期 0→1 出海基礎：梳理品類、明確產品定位、發展口號方向，並在短期合作結束前把研究轉化為社媒與達人簡報。')}</p>
             <div className="lichico-ogr-files">
-              <button className="lichico-local-hover" onClick={() => setActiveFile({ src: '/media/lichico/evidence/ogr-competitor-comparison.png', label: 'OGR / Competitor comparison' })}><img src="/media/lichico/evidence/ogr-competitor-comparison.png" alt="OGR competitor comparison" /><span>COMPETITOR + PRICE MAP ↗</span></button>
-              <button className="lichico-local-hover" onClick={() => setActiveFile({ src: '/media/lichico/evidence/ogr-creator-reference.png', label: 'OGR / Creator reference' })}><img src="/media/lichico/evidence/ogr-creator-reference.png" alt="OGR creator reference board" /><span>CREATOR REFERENCE ↗</span></button>
+              {[
+                { src: '/media/lichico/evidence/ogr-competitor-comparison.png', label: 'COMPETITOR + PRICE MAP' },
+                { src: '/media/lichico/evidence/ogr-creator-reference.png', label: 'CREATOR REFERENCE' },
+              ].map((file, index) => (
+                <article className={`ogr-flip-card ${flippedOgr === index ? 'is-flipped' : ''}`} key={file.src} onClick={() => setFlippedOgr(flippedOgr === index ? null : index)}>
+                  <div className="ogr-flip-inner">
+                    <div className="ogr-flip-face ogr-flip-front"><img src={file.src} alt={file.label} /><span>{file.label} · FLIP ↻</span></div>
+                    <div className="ogr-flip-face ogr-flip-back"><span>OGR / 0→1</span><p>{t(lang, 'Research translated into positioning, a slogan direction and creator-ready guidance.', '研究最终转化为定位、口号方向与可供达人执行的内容指引。', '研究最終轉化為定位、口號方向與可供達人執行的內容指引。')}</p><button onClick={(event) => { event.stopPropagation(); setActiveFile({ src: file.src, label: `OGR / ${file.label}` }) }}>OPEN IMAGE ↗</button></div>
+                  </div>
+                </article>
+              ))}
             </div>
             <div className="lichico-tag-row"><i>POSITIONING</i><i>SOCIAL STRATEGY</i><i>CREATOR REFERENCES</i><i>ACCOUNT PLANNING</i></div>
+            <a className="lichico-account-link" href="https://www.tiktok.com/@ogr_fashion?lang=zh-Hans" target="_blank" rel="noreferrer">OGR ARCHIVE ACCOUNT ↗</a>
           </article>
         </div>
 
@@ -1130,10 +1208,15 @@ function ProjectDrawer({ project, lang, onClose }: { project: Project; lang: Lan
 function ArchiveFooter({ lang }: { lang: Lang }) {
   return (
     <footer className="archive-contact">
-      <span>CONTACT / AVAILABILITY / 2026</span>
-      <h2>{t(lang, 'Available for film, production and visual-content opportunities.', '期待电影、制片与视觉内容方向的合作机会。', '期待電影、製片與視覺內容方向的合作機會。')}</h2>
-      <a href="mailto:canlibx@outlook.com">canlibx@outlook.com ↗</a>
-      <div>
+      <div className="archive-contact-visual">
+        <img src="/media/contact/editorial-contact-reference.jpg" alt="Editorial film still reference" />
+        <span>CONTACT / AVAILABILITY / 2026</span>
+      </div>
+      <div className="archive-contact-copy">
+        <h2>{t(lang, 'Open to opportunities in Brand Marketing, Content Strategy, Social Media Marketing, Creative Content Production and Global Brand Communications across Shenzhen and Hong Kong.', '期待深圳与香港的品牌营销、内容策略、社交媒体营销、创意内容制作与全球品牌传播机会。', '期待深圳與香港的品牌營銷、內容策略、社交媒體營銷、創意內容製作與全球品牌傳播機會。')}</h2>
+        <a href="mailto:canlibx@outlook.com">canlibx@outlook.com ↗</a>
+      </div>
+      <div className="archive-contact-links">
         <a href="/Tang_Li_Hazel_CV.docx" download>RÉSUMÉ ↓</a>
         <a href="https://www.tiktok.com/@sunnystylemart" target="_blank" rel="noreferrer">TIKTOK ↗</a>
         <a href="#top">{t(lang, 'BACK TO TOP ↑', '返回顶部 ↑', '返回頂部 ↑')}</a>

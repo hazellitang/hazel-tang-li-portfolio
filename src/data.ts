@@ -242,10 +242,10 @@ export const theatre: Project[] = [
 
 export const commercials: Project[] = [
   {
-    id: 'lichico', kind: 'commercial', title: local('Lichico Global Content', 'Lichico 品牌出海内容', 'Lichico 品牌出海內容'), year: '2024–2025', featured: true, accent: '#7f5c43', platform: 'TikTok',
+    id: 'lichico', kind: 'commercial', title: local('My Lichico Brand Globalization Project', '我的 Lichico 品牌全球化项目', '我的 Lichico 品牌全球化項目'), year: '2024–2025', featured: true, accent: '#7f5c43', platform: 'TikTok',
     role: local('Creative Content Producer (Intern)', '创意内容制作（实习）', '創意內容製作（實習）'),
     summary: local('A strategy-to-production content system for Lichico foldable treadmills in the US TikTok Shop market.', '为 Lichico 折叠跑步机进入美国 TikTok Shop 市场建立从策略到制作的内容系统。', '為 Lichico 摺疊跑步機進入美國 TikTok Shop 市場建立從策略到製作的內容系統。'),
-    responsibilities: local('Research, creative strategy, scripting, filming, editing, publishing copy and performance-led iteration. I scripted 21 creative videos that each surpassed 10K views, compared with the account’s typical 1K–2K baseline.', '研究、创意策略、脚本、拍摄、剪辑、发布文案与基于表现的快速迭代。我为 21 条创意视频编写脚本，每条播放量均超过 10K，而该账号常规内容通常为 1K–2K。', '研究、創意策略、腳本、拍攝、剪輯、發布文案與基於表現的快速迭代。我為 21 條創意視頻編寫腳本，每條播放量均超過 10K，而該帳號常規內容通常為 1K–2K。'),
+    responsibilities: local('I directed all 21 creative videos and managed scripting, production planning, filming coordination, editing, publishing copy and creative execution. Each video surpassed 10K views against the account’s typical 1K–2K baseline. Most concepts began with trending content and were adapted into product-focused storytelling for TikTok.', '我导演了全部 21 条创意视频，并统筹脚本、制作规划、拍摄协调、剪辑、发布文案与创意执行。每条视频播放量均超过 10K，而该账号常规内容通常为 1K–2K。多数创意源于平台流行内容，再转化为适合 TikTok 的产品叙事。', '我導演了全部 21 條創意影片，並統籌腳本、製作規劃、拍攝協調、剪輯、發布文案與創意執行。每條影片播放量均超過 10K，而該帳號常規內容通常為 1K–2K。多數創意源於平台流行內容，再轉化為適合 TikTok 的產品敘事。'),
     reflection: local('Research gave the work direction; production tested it; performance data determined what to refine next. The strongest outcome was a repeatable loop from insight to execution.', '研究为内容确定方向，制作负责验证，数据决定下一轮优化。最重要的成果，是建立了一个可以重复运行的“洞察—执行”闭环。', '研究為內容確定方向，製作負責驗證，數據決定下一輪優化。最重要的成果，是建立了一個可以重複運行的「洞察—執行」閉環。'),
     externalUrl: 'https://www.tiktok.com/@sunnystylemart',
     metrics: [
@@ -300,7 +300,7 @@ export interface LichicoEvidence {
 export const lichicoEvidence: LichicoEvidence[] = [
   {
     id: 'market-research',
-    title: local('Market Research', '市场研究', '市場研究'),
+    title: local('My Market Research', '我的市场研究', '我的市場研究'),
     whatIDid: local('Mapped competitors, audience behaviours and product opportunities before any creative production.', '在创意制作前梳理竞品、受众行为与产品机会。', '在創意製作前梳理競品、受眾行為與產品機會。'),
     items: [local('Competitor analysis', '竞品分析', '競品分析'), local('Social listening', '社媒聆听', '社媒聆聽'), local('User pain points', '用户痛点', '用戶痛點'), local('Product positioning', '产品定位', '產品定位')],
     image: '/media/lichico/evidence/ogr-competitor-comparison.png',
@@ -309,7 +309,7 @@ export const lichicoEvidence: LichicoEvidence[] = [
   },
   {
     id: 'creative-strategy',
-    title: local('Creative Strategy', '创意策略', '創意策略'),
+    title: local('My Creative Strategy', '我的创意策略', '我的創意策略'),
     whatIDid: local('Translated product features into platform-native storytelling, creator frameworks and timely remakes of 2024–2025 TikTok trends.', '把产品卖点转化为符合平台语境的叙事、达人框架，并结合 2024–2025 TikTok 热点进行及时翻拍，持续训练平台网感。', '把產品賣點轉化為符合平台語境的敘事、達人框架，並結合 2024–2025 TikTok 熱點進行及時翻拍，持續訓練平台網感。'),
     items: [local('Creator reference board', '达人参考板', '達人參考板'), local('Content framework', '内容框架', '內容框架'), local('Video planning', '视频策划', '視頻策劃'), local('Story structure', '叙事结构', '敘事結構')],
     image: '/media/lichico/evidence/lichico-video-structure.png',
@@ -320,7 +320,7 @@ export const lichicoEvidence: LichicoEvidence[] = [
   },
   {
     id: 'production',
-    title: local('Production', '制作执行', '製作執行'),
+    title: local('My Commercial Content Production', '我的商业内容制作', '我的商業內容製作'),
     whatIDid: local('Planned and produced short-form videos from scripting and publishing copy to the final edit.', '从脚本、发布文案到最终剪辑，规划并制作短视频内容。', '從腳本、發布文案到最終剪輯，規劃並製作短視頻內容。'),
     items: [local('Shot list', '镜头清单', '鏡頭清單'), local('Camera planning', '机位规划', '機位規劃'), local('Filming workflow', '拍摄流程', '拍攝流程'), local('Editing & publishing copy', '剪辑与发布文案', '剪輯與發布文案')],
     image: '/media/lichico/evidence/lichico-shot-list.png',

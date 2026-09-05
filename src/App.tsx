@@ -1,4 +1,5 @@
 import { CSSProperties, ReactNode, RefObject, useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Draggable } from 'gsap/Draggable'
@@ -236,7 +237,142 @@ function ReturnIcon({
 }
 
 function Marker({ children, tone = 'yellow' }: { children: ReactNode; tone?: 'yellow' | 'pink' | 'blue' }) {
-  return <mark className={`text-marker text-marker--${tone}`}>{children}</mark>
+  return <span className={`text-emphasis text-emphasis--${tone}`}>{children}</span>
+}
+
+type LightboxItem = { src: string; label: string }
+
+function MediaLightbox({ item, lang, onClose }: { item: LightboxItem | null; lang: Lang; onClose: () => void }) {
+  const rootRef = useRef<HTMLDivElement>(null)
+  const closingRef = useRef(false)
+
+  const close = () => {
+    if (!item || closingRef.current) return
+    closingRef.current = true
+    const root = rootRef.current
+    if (!root || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      onClose()
+      return
+    }
+    gsap.timeline({ onComplete: onClose })
+      .to(root.querySelector('.media-lightbox__figure'), { scale: 0.975, y: 10, autoAlpha: 0, duration: 0.24, ease: 'power2.inOut' })
+      .to(root, { autoAlpha: 0, duration: 0.28, ease: 'power1.inOut' }, 0.04)
+  }
+
+  useEffect(() => {
+    if (!item) return
+    closingRef.current = false
+    const bodyOverflow = document.body.style.overflow
+    const htmlOverflow = document.documentElement.style.overflow
+    const scrollbar = window.innerWidth - document.documentElement.clientWidth
+    const bodyPadding = document.body.style.paddingRight
+    document.body.style.overflow = 'hidden'
+    document.documentElement.style.overflow = 'hidden'
+    if (scrollbar > 0) document.body.style.paddingRight = `${scrollbar}px`
+    const onKeyDown = (event: KeyboardEvent) => event.key === 'Escape' && close()
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      document.body.style.overflow = bodyOverflow
+      document.documentElement.style.overflow = htmlOverflow
+      document.body.style.paddingRight = bodyPadding
+    }
+  }, [item?.src])
+
+  useGSAP(() => {
+    if (!item || !rootRef.current || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    gsap.timeline({ defaults: { ease: 'power2.out' } })
+      .fromTo(rootRef.current, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.36 })
+      .fromTo('.media-lightbox__figure', { scale: 0.965, y: 20, autoAlpha: 0 }, { scale: 1, y: 0, autoAlpha: 1, duration: 0.62 }, 0.06)
+  }, { scope: rootRef, dependencies: [item?.src], revertOnUpdate: true })
+
+  if (!item || typeof document === 'undefined') return null
+  return createPortal(
+    <div ref={rootRef} className="media-lightbox" role="dialog" aria-modal="true" aria-label={item.label} onMouseDown={(event) => event.target === event.currentTarget && close()}>
+      <figure className="media-lightbox__figure">
+        <ReturnIcon className="media-lightbox__close" onClick={close} label={t(lang, 'Close image', '关闭图片', '關閉圖片')} />
+        <img src={item.src} alt={item.label} />
+        <figcaption>{item.label}</figcaption>
+      </figure>
+    </div>,
+    document.body,
+  )
+}
+
+function ArchiveIndex({ lang }: { lang: Lang }) {
+  const panelRef = useRef<HTMLElement>(null)
+  const hideTimer = useRef<number | null>(null)
+  const [visible, setVisible] = useState(false)
+  const items = [
+    ['01', 'top', t(lang, 'Home', '首页', '首頁')],
+    ['02', 'about', t(lang, 'About Me', '关于我', '關於我')],
+    ['03', 'outcome', t(lang, 'Commercial Experience', '商业经验', '商業經驗')],
+    ['03.1', 'outcome', 'Lichico'],
+    ['03.2', 'lichico-results', 'NetEase Youdao'],
+    ['04', 'films', t(lang, 'Film Projects', '电影项目', '電影項目')],
+    ['05', 'skills', t(lang, 'Core Capabilities', '核心能力', '核心能力')],
+    ['06', 'contact', t(lang, 'Contact', '联系', '聯絡')],
+  ]
+
+  const cancelHide = () => {
+    if (hideTimer.current !== null) window.clearTimeout(hideTimer.current)
+    hideTimer.current = null
+  }
+  const delayHide = () => {
+    cancelHide()
+    hideTimer.current = window.setTimeout(() => setVisible(false), 3000)
+  }
+
+  useEffect(() => {
+    const eligible = () => window.scrollY > window.innerHeight * 1.15
+    const onPointerMove = (event: PointerEvent) => {
+      if (!eligible()) return setVisible(false)
+      if (event.clientX <= 68) {
+        cancelHide()
+        setVisible(true)
+      } else if (visible) delayHide()
+    }
+    const onScroll = () => {
+      cancelHide()
+      setVisible(false)
+    }
+    window.addEventListener('pointermove', onPointerMove, { passive: true })
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      cancelHide()
+      window.removeEventListener('pointermove', onPointerMove)
+      window.removeEventListener('scroll', onScroll)
+    }
+  }, [visible])
+
+  useGSAP(() => {
+    if (!panelRef.current) return
+    gsap.to(panelRef.current, {
+      x: visible ? 0 : -24,
+      autoAlpha: visible ? 1 : 0,
+      duration: visible ? 0.48 : 0.36,
+      ease: 'power2.out',
+      pointerEvents: visible ? 'auto' : 'none',
+      overwrite: 'auto',
+    })
+  }, { dependencies: [visible] })
+
+  return (
+    <>
+      <div className="archive-index-edge" aria-hidden="true" />
+      <aside ref={panelRef} className="archive-index" aria-label="Archive index" onPointerEnter={cancelHide} onPointerLeave={delayHide}>
+        <div className="archive-index__ticket" aria-hidden="true"><i /><i /><i /></div>
+        <span>ARCHIVE INDEX</span>
+        <nav>
+          {items.map(([number, id, label]) => (
+            <a key={`${number}-${id}`} href={`#${id}`} onClick={() => setVisible(false)} className={number.includes('.') ? 'is-sub' : ''}>
+              <b>{number}</b><em>{label}</em>
+            </a>
+          ))}
+        </nav>
+      </aside>
+    </>
+  )
 }
 
 function ArchiveNav({ lang, setLang }: { lang: Lang; setLang: (lang: Lang) => void }) {
@@ -303,6 +439,7 @@ function ArchiveHero({ lang }: { lang: Lang }) {
         {t(lang, 'Enter archive', '进入档案', '進入檔案')}
       </a>
       <a className="archive-hero-contact" href="mailto:canlibx@outlook.com">CONTACT ↗</a>
+      <img className="stamp-fragment stamp-fragment--hero" src="/media/contact/yellow-stamp.png" alt="" aria-hidden="true" />
     </section>
   )
 }
@@ -374,18 +511,18 @@ function AboutArchive({ lang }: { lang: Lang }) {
             .addLabel('archive-in')
             .fromTo(
               '.personal-archive-heading > *',
-              { y: 34, autoAlpha: 0 },
+              { y: 18, autoAlpha: 0.72 },
               { y: 0, autoAlpha: 1, duration: 0.3, stagger: 0.04 },
               'archive-in',
             )
             .fromTo(
               motionCards,
               {
-                x: (index) => (index % 2 === 0 ? 1 : -1) * (120 + index * 16),
-                y: (index) => 200 + index * 24,
-                rotation: (index) => (index % 2 === 0 ? -1 : 1) * (8 + index * 1.5),
-                scale: 0.84,
-                autoAlpha: 0,
+                x: (index) => (index % 2 === 0 ? 1 : -1) * (28 + index * 3),
+                y: (index) => 44 + index * 4,
+                rotation: (index) => (index % 2 === 0 ? -1 : 1) * (2.2 + index * 0.18),
+                scale: 0.96,
+                autoAlpha: 0.76,
               },
               {
                 x: 0,
@@ -393,8 +530,8 @@ function AboutArchive({ lang }: { lang: Lang }) {
                 rotation: 0,
                 scale: 1,
                 autoAlpha: 1,
-                duration: 0.62,
-                stagger: 0.07,
+                duration: 0.48,
+                stagger: 0.035,
               },
               'archive-in+=0.08',
             )
@@ -478,7 +615,7 @@ function AboutArchive({ lang }: { lang: Lang }) {
                 <article className="personal-card personal-card--text personal-card--green">
                   <span>WHAT I BRING / 03</span>
                   <h3>Cross-cultural communication</h3>
-                  <p>Working across <Marker tone="blue">Hong Kong, Mainland China and international environments</Marker>, I communicate across Mandarin, Cantonese and English-speaking contexts.</p>
+                  <p>Studying in the UK and working across <Marker tone="blue">Hong Kong, Mainland China and international environments</Marker> taught me to communicate across Mandarin, Cantonese and English-speaking contexts.</p>
                 </article>
               </div>
               <div className="personal-card-motion personal-card-motion--language">
@@ -535,7 +672,7 @@ function AboutArchive({ lang }: { lang: Lang }) {
               <div className="personal-card-motion personal-card-motion--zh-culture">
                 <article className="personal-card personal-card--text personal-card--green">
                   <span>WHAT I BRING / 03</span><h3>{lang === 'zh' ? '跨文化沟通' : '跨文化溝通'}</h3>
-                  <p>{lang === 'zh' ? '在香港、内地与国际环境中工作，能在普通话、粤语与英语语境之间准确沟通。' : '在香港、內地與國際環境中工作，能在普通話、粵語與英語語境之間準確溝通。'}</p>
+                  <p>{lang === 'zh' ? '在香港、内地与英国学习及工作，能在普通话、粤语与英语语境之间准确沟通，并将不同文化经验转化为内容判断。' : '在香港、內地與英國學習及工作，能在普通話、粵語與英語語境之間準確溝通，並將不同文化經驗轉化為內容判斷。'}</p>
                 </article>
               </div>
               <div className="personal-card-motion personal-card-motion--zh-language">
@@ -551,7 +688,6 @@ function AboutArchive({ lang }: { lang: Lang }) {
               </div>
             </>
           )}
-          <img className="personal-highlighters" src="/media/about/highlighter-pens.png" alt="" aria-hidden="true" />
         </div>
 
         <footer className="personal-archive-footer">
@@ -563,7 +699,7 @@ function AboutArchive({ lang }: { lang: Lang }) {
               <span>AUDIENCE RESEARCH</span>
             </>
           ) : (
-            <a href="/Tang_Li_Hazel_CV.docx" download>下载简历 ↓</a>
+            <a href="/Hazel_Li_CV.pdf" download>{lang === 'zh' ? '下载简历 ↓' : '下載履歷 ↓'}</a>
           )}
         </footer>
       </div>
@@ -576,21 +712,10 @@ function LichicoOutcome({ lang }: { lang: Lang }) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [activeTakeaway, setActiveTakeaway] = useState(0)
   const [videoLoading, setVideoLoading] = useState(true)
-  const [activeFile, setActiveFile] = useState<{ src: string; label: string } | null>(null)
+  const [activeFile, setActiveFile] = useState<LightboxItem | null>(null)
   const [flippedOgr, setFlippedOgr] = useState<number | null>(null)
   const project = commercials[0]
   const active = lichicoHighlights[activeIndex]
-
-  useEffect(() => {
-    if (!activeFile) return
-    const closeOnEscape = (event: KeyboardEvent) => event.key === 'Escape' && setActiveFile(null)
-    document.body.style.overflow = 'hidden'
-    window.addEventListener('keydown', closeOnEscape)
-    return () => {
-      document.body.style.overflow = ''
-      window.removeEventListener('keydown', closeOnEscape)
-    }
-  }, [activeFile])
 
   useEffect(() => setVideoLoading(true), [activeIndex])
 
@@ -816,15 +941,7 @@ function LichicoOutcome({ lang }: { lang: Lang }) {
 
       </div>
 
-      {activeFile && (
-        <div className="lichico-lightbox" role="dialog" aria-modal="true" aria-label={activeFile.label} onMouseDown={(event) => event.target === event.currentTarget && setActiveFile(null)}>
-          <div>
-            <ReturnIcon className="lichico-lightbox-close" onClick={() => setActiveFile(null)} label={t(lang, 'Close preview', '关闭预览', '關閉預覽')} />
-            <img src={activeFile.src} alt={activeFile.label} />
-            <span>{activeFile.label}</span>
-          </div>
-        </div>
-      )}
+      <MediaLightbox item={activeFile} lang={lang} onClose={() => setActiveFile(null)} />
     </section>
   )
 }
@@ -856,9 +973,9 @@ function FilmArchive({ lang, onOpen }: { lang: Lang; onOpen: (project: Project) 
   const documentaries = films.filter((project) => project.category === 'documentary')
   return (
     <section className="archive-section film-production" id="films">
-      <div className="archive-section-label">FILM PRODUCTION / SELECTED WORK</div>
+      <div className="archive-section-label">MY FILM ARCHIVE / SELECTED WORK</div>
       <div className="film-archive-heading archive-reveal">
-        <h2>{t(lang, 'Films as objects, notes and unfinished questions.', '把电影看作物件、笔记与未完成的问题。', '把電影看作物件、筆記與未完成的問題。')}</h2>
+        <h2>{t(lang, 'Every film I made is both a creative record and an attempt to understand questions I have not yet answered.', '我的每一部电影，都是一份创作记录，也是一个我对未解决问题的思考。', '我的每一部電影，都是一份創作記錄，也是一個我對未解問題的思考。')}</h2>
         <p>{t(lang, 'Hover to read a working note. Open a title for the film, process and image archive.', '悬停阅读工作笔记；打开作品可查看影片、制作过程与影像档案。', '懸停閱讀工作筆記；打開作品可查看影片、製作過程與影像檔案。')}</p>
       </div>
       <div className="film-group archive-reveal">
@@ -873,6 +990,7 @@ function FilmArchive({ lang, onOpen }: { lang: Lang; onOpen: (project: Project) 
           {documentaries.map((project) => <FilmCard key={project.id} project={project} lang={lang} onOpen={onOpen} />)}
         </div>
       </div>
+      <img className="stamp-fragment stamp-fragment--films" src="/media/contact/yellow-stamp.png" alt="" aria-hidden="true" />
     </section>
   )
 }
@@ -1206,21 +1324,69 @@ function ProjectDrawer({ project, lang, onClose }: { project: Project; lang: Lan
 }
 
 function ArchiveFooter({ lang }: { lang: Lang }) {
+  const sectionRef = useRef<HTMLElement>(null)
+  const posterRef = useRef<HTMLButtonElement>(null)
+  const [openPoster, setOpenPoster] = useState<LightboxItem | null>(null)
+
+  useGSAP(() => {
+    const section = sectionRef.current
+    const poster = posterRef.current
+    if (!section || !poster || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    gsap.fromTo(
+      '.stamp-contact__composition',
+      { y: 28, scale: 0.96, autoAlpha: 0 },
+      { y: 0, scale: 1, autoAlpha: 1, duration: 1.05, ease: 'power2.out', scrollTrigger: { trigger: section, start: 'top 76%', once: true } },
+    )
+    const enter = () => gsap.to(poster, { scale: 1.02, duration: 0.55, ease: 'power2.out', overwrite: 'auto' })
+    const leave = () => gsap.to(poster, { scale: 1, duration: 0.65, ease: 'power2.out', overwrite: 'auto' })
+    poster.addEventListener('pointerenter', enter)
+    poster.addEventListener('pointerleave', leave)
+    return () => {
+      poster.removeEventListener('pointerenter', enter)
+      poster.removeEventListener('pointerleave', leave)
+    }
+  }, { scope: sectionRef })
+
+  const availability = t(
+    lang,
+    'Available for opportunities across Shenzhen & Hong Kong',
+    '期待深圳与香港的合作机会',
+    '期待深圳與香港的合作機會',
+  )
+
   return (
-    <footer className="archive-contact">
-      <div className="archive-contact-visual">
-        <img src="/media/contact/editorial-contact-reference.jpg" alt="Editorial film still reference" />
-        <span>CONTACT / AVAILABILITY / 2026</span>
+    <footer className="archive-contact stamp-contact" id="contact" ref={sectionRef}>
+      <div className="stamp-contact__composition">
+        <span className="stamp-contact__kicker">CONTACT / AVAILABILITY / 2026</span>
+        <button
+          ref={posterRef}
+          className="stamp-contact__poster"
+          onClick={() => setOpenPoster({ src: '/media/contact/yellow-stamp.png', label: 'Hazel Li — availability stamp' })}
+          aria-label={t(lang, 'Open collectible poster', '打开收藏海报', '打開收藏海報')}
+        >
+          <img src="/media/contact/yellow-stamp.png" alt="Yellow editorial stamp artwork" />
+          <span className="stamp-keyword stamp-keyword--a">BRAND MARKETING</span>
+          <span className="stamp-keyword stamp-keyword--b">CONTENT STRATEGY</span>
+          <span className="stamp-keyword stamp-keyword--c">CREATIVE PRODUCTION</span>
+          <span className="stamp-keyword stamp-keyword--d">GLOBAL BRAND</span>
+          <span className="stamp-keyword stamp-keyword--e">OPEN TO WORK</span>
+        </button>
+        <div className="stamp-contact__availability">
+          <p>{availability} —</p>
+          <ul>
+            <li>Brand Marketing</li>
+            <li>Content Strategy</li>
+            <li>Creative Content Production</li>
+            <li>Global Brand Communications</li>
+          </ul>
+        </div>
+        <div className="stamp-contact__links">
+          <a href="mailto:canlibx@outlook.com">EMAIL ↗</a>
+          <a className="linkedin-icon" href="<PRIVATE_URL>" target="_blank" rel="noreferrer" aria-label="LinkedIn" title="LinkedIn">in</a>
+          <a href="/Hazel_Li_CV.pdf" download>RÉSUMÉ ↓</a>
+        </div>
       </div>
-      <div className="archive-contact-copy">
-        <h2>{t(lang, 'Open to opportunities in Brand Marketing, Content Strategy, Social Media Marketing, Creative Content Production and Global Brand Communications across Shenzhen and Hong Kong.', '期待深圳与香港的品牌营销、内容策略、社交媒体营销、创意内容制作与全球品牌传播机会。', '期待深圳與香港的品牌營銷、內容策略、社交媒體營銷、創意內容製作與全球品牌傳播機會。')}</h2>
-        <a href="mailto:canlibx@outlook.com">canlibx@outlook.com ↗</a>
-      </div>
-      <div className="archive-contact-links">
-        <a href="/Tang_Li_Hazel_CV.docx" download>RÉSUMÉ ↓</a>
-        <a href="https://www.tiktok.com/@sunnystylemart" target="_blank" rel="noreferrer">TIKTOK ↗</a>
-        <a href="#top">{t(lang, 'BACK TO TOP ↑', '返回顶部 ↑', '返回頂部 ↑')}</a>
-      </div>
+      <MediaLightbox item={openPoster} lang={lang} onClose={() => setOpenPoster(null)} />
     </footer>
   )
 }
@@ -1235,8 +1401,9 @@ function App() {
   }, [lang])
 
   return (
-    <main className="archive-page" ref={pageRef}>
+    <main className={`archive-page archive-page--${lang}`} ref={pageRef}>
       <ArchiveNav lang={lang} setLang={setLang} />
+      <ArchiveIndex lang={lang} />
       <ArchiveHero lang={lang} />
       <AboutArchive lang={lang} />
       <LichicoOutcome lang={lang} />

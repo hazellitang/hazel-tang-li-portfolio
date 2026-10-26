@@ -77,6 +77,7 @@ export const films: Project[] = [
   {
     id: 'lihua', kind: 'film', title: local("Lihua’s Wishes", '丽华的愿望', '麗華的願望'),
     englishTitle: "Lihua’s Wishes", year: '2024', category: 'short', priority: 'hero', featured: true, accent: '#a76742',
+    image: '/media/films/covers/lihua.jpg',
     role: local('Director · Director of Photography · Producer', '导演 · 摄影指导 · 制片', '導演 · 攝影指導 · 製片'),
     summary: local(
       'Graduation film · Foshan, China · 6–10 April 2024. Inspired by a close family member who has spent a lifetime caring for others before herself, the film follows a middle-aged mother supporting her family through a small rice-noodle shop while navigating an absent ex-husband, two children and an unexpected illness.',
@@ -191,27 +192,27 @@ export const films: Project[] = [
   },
   {
     id: 'inner-voice', kind: 'film', title: local('Inner Voice: The Stranger', '内心声音：陌生人', '內心聲音：陌生人'),
-    year: 'UCL', category: 'short', accent: '#667064', role: local('Cinematographer', '摄影', '攝影'), summary: local('Short film project.', '短片项目。', '短片項目。'), responsibilities: waiting, reflection: reflectionWaiting,
+    year: 'UCL', category: 'short', accent: '#667064', image: '/media/films/covers/inner-voice.jpg', role: local('Cinematographer', '摄影', '攝影'), summary: local('Short film project.', '短片项目。', '短片項目。'), responsibilities: waiting, reflection: reflectionWaiting,
     externalUrl: 'https://www.bilibili.com/video/BV1qu4y1f716/', embedUrl: 'https://player.bilibili.com/player.html?bvid=BV1qu4y1f716&page=1',
   },
   {
     id: 'fall-in-love', kind: 'film', title: local('I Think I Fall in Love with You', '我想我爱上你了', '我想我愛上你了'),
-    year: 'UCL', category: 'short', accent: '#8a745f', role: local('Director', '导演', '導演'), summary: local('Narrative short film project.', '剧情短片项目。', '劇情短片項目。'), responsibilities: waiting, reflection: reflectionWaiting,
+    year: 'UCL', category: 'short', accent: '#8a745f', image: '/media/films/covers/fall-in-love.jpg', role: local('Director', '导演', '導演'), summary: local('Narrative short film project.', '剧情短片项目。', '劇情短片項目。'), responsibilities: waiting, reflection: reflectionWaiting,
     externalUrl: 'https://www.bilibili.com/video/BV17s4y1r7By/', embedUrl: 'https://player.bilibili.com/player.html?bvid=BV17s4y1r7By&page=1',
   },
   {
     id: 'somewhere-safe', kind: 'film', title: local('Somewhere Safe', '安全之地', '安全之地'),
-    year: 'UCL', category: 'short', accent: '#495b61', role: local('Producer', '制片', '製片'), summary: local('Independent student short film.', '学生独立短片项目。', '學生獨立短片項目。'), responsibilities: waiting, reflection: reflectionWaiting,
+    year: 'UCL', category: 'short', accent: '#495b61', image: '/media/films/covers/somewhere-safe.jpg', role: local('Producer', '制片', '製片'), summary: local('Independent student short film.', '学生独立短片项目。', '學生獨立短片項目。'), responsibilities: waiting, reflection: reflectionWaiting,
     externalUrl: 'https://www.bilibili.com/video/BV1eg4y157Vy/', embedUrl: 'https://player.bilibili.com/player.html?bvid=BV1eg4y157Vy&page=1',
   },
   {
     id: 'street-art', kind: 'film', title: local('Window to Street Art', '街头艺术之窗', '街頭藝術之窗'),
-    year: '2022', category: 'documentary', accent: '#816647', role: local('Cinematographer', '摄影', '攝影'), summary: local('An observational documentary on London street artist Nathan Bowen.', '关于伦敦街头艺术家 Nathan Bowen 的观察式纪录片。', '關於倫敦街頭藝術家 Nathan Bowen 的觀察式紀錄片。'), responsibilities: local('Character research, interview preparation, observational footage and visual storytelling.', '人物研究、访谈准备、观察式拍摄与视觉叙事。', '人物研究、訪談準備、觀察式拍攝與視覺敘事。'), reflection: reflectionWaiting,
+    year: '2022', category: 'documentary', accent: '#816647', image: '/media/films/covers/street-art.jpg', role: local('Cinematographer', '摄影', '攝影'), summary: local('An observational documentary on London street artist Nathan Bowen.', '关于伦敦街头艺术家 Nathan Bowen 的观察式纪录片。', '關於倫敦街頭藝術家 Nathan Bowen 的觀察式紀錄片。'), responsibilities: local('Character research, interview preparation, observational footage and visual storytelling.', '人物研究、访谈准备、观察式拍摄与视觉叙事。', '人物研究、訪談準備、觀察式拍攝與視覺敘事。'), reflection: reflectionWaiting,
     externalUrl: 'https://www.bilibili.com/video/BV1SG4y1w7C6/', embedUrl: 'https://player.bilibili.com/player.html?bvid=BV1SG4y1w7C6&page=1',
   },
   {
     id: 'blossom', kind: 'film', title: local('Blossom in Her Palm', '掌心花开', '掌心花開'),
-    year: '2023', category: 'documentary', accent: '#78655d', role: local('Producer', '制片', '製片'), summary: local('A documentary portrait of a Chinese medicine practitioner in London.', '一部关于伦敦中医从业者的纪录片。', '一部關於倫敦中醫從業者的紀錄片。'), responsibilities: local('Project planning, subject coordination, scheduling and documentary structure.', '项目规划、拍摄对象沟通、排期与纪录片结构。', '項目規劃、拍攝對象溝通、排期與紀錄片結構。'), reflection: reflectionWaiting,
+    year: '2023', category: 'documentary', accent: '#78655d', image: '/media/films/covers/blossom.jpg', role: local('Producer', '制片', '製片'), summary: local('A documentary portrait of a Chinese medicine practitioner in London.', '一部关于伦敦中医从业者的纪录片。', '一部關於倫敦中醫從業者的紀錄片。'), responsibilities: local('Project planning, subject coordination, scheduling and documentary structure.', '项目规划、拍摄对象沟通、排期与纪录片结构。', '項目規劃、拍攝對象溝通、排期與紀錄片結構。'), reflection: reflectionWaiting,
     externalUrl: 'https://www.bilibili.com/video/BV1RT421D7Ej/', embedUrl: 'https://player.bilibili.com/player.html?bvid=BV1RT421D7Ej&page=1',
   },
 ]

@@ -1558,17 +1558,79 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 .lichico-video-loading.is-ready { opacity: 0; visibility: hidden; }
 .lichico-capability-grid { perspective: 1200px; }
-.lichico-capability-card { opacity: .66; cursor: pointer; transition: opacity .35s ease, background-color .35s ease, border-color .35s ease; }
-.lichico-capability-card:hover,
-.lichico-capability-card:focus-visible,
-.lichico-capability-card.is-active { opacity: 1; background: rgba(247, 242, 232, .84); outline: none; }
-.lichico-capability-card.is-active { border-color: rgba(162, 46, 36, .58); }
+.lichico-capability-card { opacity: 1; cursor: default; transition: background-color .35s ease, border-color .35s ease; }
+.lichico-capability-card:hover { background: rgba(247, 242, 232, .84); }
 .lichico-capability-copy b { color: var(--archive-red); font-size: 12px; }
 .lichico-file-thumb img { object-fit: contain; background: #f7f2e9; }
 .lichico-takeaway-results { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--archive-line); border-left: 1px solid var(--archive-line); }
 .lichico-takeaway-results div { padding: 16px; border-right: 1px solid var(--archive-line); border-bottom: 1px solid var(--archive-line); }
 .lichico-takeaway-results strong { display: block; font: 600 24px/1 var(--archive-display); }
 .lichico-takeaway-results span { display: block; margin-top: 7px; color: var(--archive-muted); font: 8px/1.2 var(--archive-mono); }
+.lichico-main-takeaway {
+  max-width: 1320px;
+  margin: 28px auto 0;
+  border: 1px solid var(--archive-line);
+  background: rgba(242, 237, 227, .5);
+}
+.lichico-main-takeaway summary {
+  display: grid;
+  grid-template-columns: minmax(150px, .45fr) 1fr 48px;
+  align-items: center;
+  gap: 24px;
+  min-height: 88px;
+  padding: 18px 24px;
+  cursor: pointer;
+  list-style: none;
+}
+.lichico-main-takeaway summary::-webkit-details-marker { display: none; }
+.lichico-main-takeaway summary > span {
+  color: var(--archive-red);
+  font: 10px/1 var(--archive-mono);
+  letter-spacing: .12em;
+}
+.lichico-main-takeaway summary strong {
+  font: 500 clamp(18px, 1.8vw, 26px)/1.2 var(--archive-display);
+}
+.lichico-main-takeaway summary i {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--archive-line);
+  border-radius: 50%;
+  font: normal 24px/1 var(--archive-sans);
+  transition: color .3s ease, background-color .3s ease, transform .45s ease;
+}
+.lichico-main-takeaway summary:hover i {
+  background: var(--archive-night);
+  color: var(--archive-paper);
+}
+.lichico-main-takeaway[open] summary i { transform: rotate(45deg); }
+.lichico-main-takeaway-body {
+  display: grid;
+  grid-template-columns: 1.4fr .6fr;
+  gap: 48px;
+  padding: 30px 24px 36px;
+  border-top: 1px solid var(--archive-line);
+}
+.lichico-main-takeaway-body p {
+  max-width: 900px;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.75;
+}
+.lichico-main-takeaway-body > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: start;
+  gap: 8px;
+}
+.lichico-main-takeaway-body > div span {
+  padding: 8px 10px;
+  border: 1px solid var(--archive-line);
+  font: 8px/1 var(--archive-mono);
+  letter-spacing: .06em;
+}
 .lichico-bts-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
 .lichico-bts-card { min-height: 430px; }
 .lichico-bts-card img { transition: transform .65s cubic-bezier(.2,.8,.2,1), filter .45s ease; }
@@ -1622,6 +1684,22 @@ button, a { -webkit-tap-highlight-color: transparent; }
 @media (max-width: 680px) {
   .lichico-bts-grid { grid-template-columns: 1fr; }
   .lichico-bts-card { min-height: 320px; }
+  .lichico-main-takeaway summary {
+    grid-template-columns: 1fr 44px;
+    gap: 10px 16px;
+    padding: 18px;
+  }
+  .lichico-main-takeaway summary > span,
+  .lichico-main-takeaway summary strong { grid-column: 1; }
+  .lichico-main-takeaway summary i {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+  .lichico-main-takeaway-body {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px 18px 28px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

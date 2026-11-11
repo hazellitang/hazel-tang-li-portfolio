@@ -538,7 +538,6 @@ function AboutArchive({ lang }: { lang: Lang }) {
 function LichicoOutcome({ lang }: { lang: Lang }) {
   const sectionRef = useRef<HTMLElement>(null)
   const [activeIndex, setActiveIndex] = useState(0)
-  const [activeTakeaway, setActiveTakeaway] = useState(0)
   const [videoLoading, setVideoLoading] = useState(true)
   const [activeFile, setActiveFile] = useState<{ src: string; label: string } | null>(null)
   const project = commercials[0]
@@ -562,11 +561,6 @@ function LichicoOutcome({ lang }: { lang: Lang }) {
     if (reduced) return
 
     gsap.fromTo('.lichico-local-video', { scale: 1.025, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.65, ease: 'power2.out' })
-    gsap.fromTo(
-      '.lichico-capability-card.is-active',
-      { scale: 0.985, y: 12 },
-      { scale: 1, y: 0, duration: 0.55, ease: 'power3.out', overwrite: 'auto' },
-    )
     gsap.fromTo(
       '.lichico-bts-card',
       { y: 28, rotate: (index) => index === 0 ? -1.4 : 1.4, autoAlpha: 0 },
@@ -592,7 +586,7 @@ function LichicoOutcome({ lang }: { lang: Lang }) {
       })
     })
     return () => cleanups.forEach((cleanup) => cleanup())
-  }, { scope: sectionRef, dependencies: [activeIndex, activeTakeaway], revertOnUpdate: true })
+  }, { scope: sectionRef, dependencies: [activeIndex], revertOnUpdate: true })
 
   const bts = [
     { src: '/media/lichico/bts/studio-lighting.jpg', label: t(lang, 'Studio lighting', '棚拍灯光', '棚拍燈光') },
@@ -668,21 +662,16 @@ function LichicoOutcome({ lang }: { lang: Lang }) {
 
       <div className="lichico-screen lichico-screen--files" id="lichico-files">
         <div className="lichico-section-head archive-reveal">
-          <span>02 / MAIN TAKEAWAYS</span>
-          <h2>{t(lang, 'The Main Takeaways from Lichico', 'Lichico 项目的核心收获', 'Lichico 項目的核心收穫')}</h2>
-          <p>{t(lang, 'Select a card to bring its process and evidence forward.', '点击卡片，查看对应的过程与证据。', '點擊卡片，查看對應的過程與證據。')}</p>
+          <span>02 / ROLE &amp; RESULTS</span>
+          <h2>{t(lang, 'What I did — and what it achieved.', '我做了什么，以及取得的成果。', '我做了什麼，以及取得的成果。')}</h2>
+          <p>{t(lang, 'Responsibilities, working evidence and campaign outcomes remain visible here.', '职责、工作证据与项目成果在此保持常显。', '職責、工作證據與項目成果在此保持常顯。')}</p>
         </div>
 
         <div className="lichico-capability-grid">
           {lichicoEvidence.map((capability, index) => (
             <article
-              className={`lichico-capability-card lichico-local-hover archive-reveal ${activeTakeaway === index ? 'is-active' : ''}`}
+              className="lichico-capability-card lichico-local-hover archive-reveal"
               key={capability.id}
-              role="button"
-              tabIndex={0}
-              aria-pressed={activeTakeaway === index}
-              onClick={() => setActiveTakeaway(index)}
-              onKeyDown={(event) => (event.key === 'Enter' || event.key === ' ') && setActiveTakeaway(index)}
             >
               <div className="lichico-capability-copy">
                 <span>0{index + 1}</span>
@@ -707,6 +696,28 @@ function LichicoOutcome({ lang }: { lang: Lang }) {
             </article>
           ))}
         </div>
+
+        <details className="lichico-main-takeaway archive-reveal">
+          <summary>
+            <span>MAIN TAKEAWAY</span>
+            <strong>{t(lang, 'Open the project reflection', '展开项目复盘', '展開項目復盤')}</strong>
+            <i aria-hidden="true">＋</i>
+          </summary>
+          <div className="lichico-main-takeaway-body">
+            <p>{t(
+              lang,
+              'Through continuous A/B testing, we compared high-performing videos with historical account data to identify recurring hooks, keywords and trust signals. The repeatable lesson was to treat each creative as a hypothesis: validate what earns attention, then refine the message for international retail audiences.',
+              '通过持续 A/B 测试，我们把高表现视频与账号历史数据进行对照，归纳反复出现的开场钩子、高频词和信任信号。最终形成的可复用方法是：把每条内容当作一个假设，先验证什么能抓住注意力，再针对海外零售受众迭代表达。',
+              '通過持續 A/B 測試，我們把高表現影片與帳號歷史數據進行對照，歸納反覆出現的開場鉤子、高頻詞和信任信號。最終形成的可複用方法是：把每條內容當作一個假設，先驗證什麼能抓住注意力，再針對海外零售受眾迭代表達。',
+            )}</p>
+            <div>
+              <span>A/B TESTING</span>
+              <span>CONSUMER INSIGHTS</span>
+              <span>TRUST SIGNALS</span>
+              <span>ITERATION</span>
+            </div>
+          </div>
+        </details>
 
         <div className="lichico-bts archive-reveal">
           <div className="lichico-bts-title"><span>BEHIND THE SCENES</span><b>02 SELECTED IMAGES · OTHER MATERIALS CONFIDENTIAL</b></div>
